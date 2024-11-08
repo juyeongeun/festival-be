@@ -166,6 +166,7 @@ model Booth {
   image      String?
   type       BoothType
   accept     Accept
+  watingTime String?    @default("바로 가지러 오세요.")
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
   festival   Festival   @relation(fields: [festivalId], references: [id])
@@ -214,12 +215,13 @@ model WishList {
 }
 
 model Pay {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  boothId   Int
-  payType   PayType
-  price     Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  boothId      Int
+  payType      PayType
+  price        Int
+  watingNumber String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id])
 }
