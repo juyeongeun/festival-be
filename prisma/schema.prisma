@@ -1,0 +1,225 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Provider {
+  KAKAO
+  GOOGLE
+  NAVER
+}
+
+enum Role {
+  ADMIN
+  USER
+  SELLER
+}
+
+enum BoardType {
+  LOSS
+  BOARD
+}
+
+enum LossType {
+  LOSS
+  GET
+  NULL
+}
+
+enum BoothType {
+  EAT
+  PLAY
+  ETC
+}
+
+enum Accept {
+  ACCEPT
+  REJECT
+  WAITING
+}
+
+enum PayType {
+  NAVERPAY
+  KAKAOPAY
+  TOSSPAY
+}
+
+model User {
+  id            Int             @id @default(autoincrement())
+  userId        String
+  password      String?
+  nickname      String?
+  provider      Provider?
+  providerId    String?
+  role          Role
+  refreshToken  String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  participation Participation[]
+  notifications Notification[]
+  board         Board[]
+  comment       Comment[]
+  notice        Notice[]
+  booth         Booth[]
+  review        Review[]
+  wishList      WishList[]
+  pay           Pay[]
+}
+
+model Festival {
+  id            Int             @id @default(autoincrement())
+  festivalCode  Int
+  mapImage      String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  participation Participation[]
+  board         Board[]
+  booth         Booth[]
+}
+
+model Participation {
+  id           Int            @id @default(autoincrement())
+  userId       Int
+  festivalId   Int
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  festival     Festival       @relation(fields: [festivalId], references: [id])
+  user         User           @relation(fields: [userId], references: [id])
+  notification Notification[]
+  board        Board[]
+  comment      Comment[]
+}
+
+model Notification {
+  id              Int           @id @default(autoincrement())
+  participationId Int
+  festivalId      Int
+  userId          Int
+  content         String
+  read            Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  participation   Participation @relation(fields: [participationId], references: [id])
+  user            User          @relation(fields: [userId], references: [id])
+}
+
+model Board {
+  id              Int           @id @default(autoincrement())
+  userId          Int
+  participationId Int
+  festivalId      Int
+  title           String
+  content         String
+  images          String[]      @default([])
+  boardType       BoardType
+  lossType        LossType      @default(NULL)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  user            User          @relation(fields: [userId], references: [id])
+  participation   Participation @relation(fields: [participationId], references: [id])
+  festival        Festival      @relation(fields: [festivalId], references: [id])
+  comments        Comment[]
+}
+
+model Comment {
+  id              Int           @id @default(autoincrement())
+  userId          Int
+  boardId         Int
+  participationId Int
+  boardUserId     Int
+  fetivalId       Int
+  content         String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  user            User          @relation(fields: [userId], references: [id])
+  board           Board         @relation(fields: [boardId], references: [id])
+  participation   Participation @relation(fields: [participationId], references: [id])
+}
+
+model Notice {
+  id         Int      @id @default(autoincrement())
+  adminId    Int
+  festivalId Int
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  admin      User     @relation(fields: [adminId], references: [id])
+}
+
+model Booth {
+  id         Int        @id @default(autoincrement())
+  festivalId Int
+  userId     Int
+  name       String
+  location   String
+  content    String
+  image      String?
+  type       BoothType
+  accept     Accept
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  festival   Festival   @relation(fields: [festivalId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
+  review     Review[]
+  menu       Menu[]
+  wishList   WishList[]
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  boothId   Int
+  content   String
+  score     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  booth     Booth    @relation(fields: [boothId], references: [id])
+}
+
+model Menu {
+  id        Int        @id @default(autoincrement())
+  boothId   Int
+  name      String
+  image     String?
+  price     Int
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  booth     Booth      @relation(fields: [boothId], references: [id])
+  wishList  WishList[]
+}
+
+model WishList {
+  id        Int      @id @default(autoincrement())
+  menuId    Int
+  userId    Int
+  boothId   Int
+  cnt       Int
+  price     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  menu      Menu     @relation(fields: [menuId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  booth     Booth    @relation(fields: [boothId], references: [id])
+}
+
+model Pay {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  boothId   Int
+  payType   PayType
+  price     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+}
