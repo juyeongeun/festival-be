@@ -157,23 +157,26 @@ model Notice {
 }
 
 model Booth {
-  id         Int        @id @default(autoincrement())
-  festivalId Int
-  userId     Int
-  name       String
-  location   String
-  content    String
-  image      String?
-  type       BoothType
-  accept     Accept
-  watingTime String?    @default("바로 가지러 오세요.")
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  festival   Festival   @relation(fields: [festivalId], references: [id])
-  user       User       @relation(fields: [userId], references: [id])
-  review     Review[]
-  menu       Menu[]
-  wishList   WishList[]
+  id            Int        @id @default(autoincrement())
+  festivalId    Int
+  userId        Int
+  name          String
+  location      String?
+  content       String
+  image         String?
+  boothtype     BoothType
+  typeCategory  String?
+  accept        Accept     @default(WAITING)
+  watingTime    String?    @default("바로 가지러 오세요.")
+  accountNumber String?
+  bankName      String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  festival      Festival   @relation(fields: [festivalId], references: [id])
+  user          User       @relation(fields: [userId], references: [id])
+  review        Review[]
+  menu          Menu[]
+  wishList      WishList[]
 }
 
 model Review {
@@ -192,8 +195,10 @@ model Menu {
   id        Int        @id @default(autoincrement())
   boothId   Int
   name      String
+  content   String?
   image     String?
   price     Int
+  soldOut   Boolean    @default(false)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   booth     Booth      @relation(fields: [boothId], references: [id])
