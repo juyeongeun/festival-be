@@ -4,23 +4,23 @@
 
 const accessExtractor = function (req) {
   const cookieString = req.headers.cookie;
-  let accessToken = "";
+  let accessToken = '';
   if (cookieString) {
-    if (cookieString.startsWith("access-token=")) {
+    if (cookieString.startsWith('access-token=')) {
       accessToken = cookieString
-        .split("; ")
-        .find((cookie) => cookie.startsWith("access-token="))
-        .split("=")[1];
+        .split('; ')
+        .find((cookie) => cookie.startsWith('access-token='))
+        .split('=')[1];
     }
   }
 
   if (!cookieString || !accessToken) {
-    const error = new Error("Unauthorized");
+    const error = new Error('Unauthorized');
     error.status = 401;
     error.data = {
-      message: "유효하지 않은 액세스 토큰입니다.",
+      message: '유효하지 않은 액세스 토큰입니다.',
       // requestURL: req.originalUrl,
-      "access-token": accessToken,
+      'access-token': accessToken,
     };
     throw error;
   }
@@ -31,20 +31,20 @@ const accessExtractor = function (req) {
 
 const refreshExtractor = function (req) {
   const cookieString = req.headers.cookie;
-  let refreshToken = "";
+  let refreshToken = '';
   if (cookieString) {
     refreshToken = cookieString
-      .split("; ")
-      .find((cookie) => cookie.startsWith("refresh-token="))
-      .split("=")[1];
+      .split('; ')
+      .find((cookie) => cookie.startsWith('refresh-token='))
+      .split('=')[1];
   }
   if (!cookieString || !refreshToken) {
-    const error = new Error("Forbidden");
+    const error = new Error('Forbidden');
     error.status = 403;
     error.data = {
-      message: "유효하지 않은 리플레쉬 토큰입니다.",
+      message: '유효하지 않은 리플레쉬 토큰입니다.',
       // requestURL: req.originalUrl,
-      "refresh-token": refreshToken,
+      'refresh-token': refreshToken,
     };
     throw error;
   }

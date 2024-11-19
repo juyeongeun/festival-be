@@ -1,0 +1,7 @@
+### 이미지 수정
+PATCH http://localhost:3001/festival/1
+Content-Type: application/json
+
+{
+  "mapImage" : "fffffsfs"
+}
