@@ -1,4 +1,4 @@
-import festivalService from '../services/festivalServices.js';
+import festivalService from "../services/festivalServices.js";
 export async function patchFestival(req, res, next) {
   try {
     const { festivalId } = req.params;

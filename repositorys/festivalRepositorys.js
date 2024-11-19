@@ -1,4 +1,4 @@
-import Prisma from '../utils/prismaClient.js';
+import Prisma from "../utils/prismaClient.js";
 
 const festivalImagePatch = async (festivalId, mapImage) => {
   const data = await Prisma.festival.update({
