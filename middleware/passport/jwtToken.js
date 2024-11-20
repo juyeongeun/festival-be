@@ -1,6 +1,5 @@
 import { Strategy as JwtStrategy } from "passport-jwt";
 import userService from "../../services/userService.js";
-import { JWT_SECRET } from "../../env.js";
 
 const accessExtractor = function (req) {
   const cookieString = req.headers.cookie;
