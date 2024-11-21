@@ -4,10 +4,9 @@ import passport from "../config/passportConfig.js";
 
 const router = express.Router();
 
-router.post(
-  "/:festivalId/participation",
-  passport.authenticate("access-token", { session: false }),
-  participationController.createParticipation
-);
+router
+  .route("/:festivalId/participation")
+  .all(passport.authenticate("access-token", { session: false }))
+  .post(participationController.createParticipation);
 
 export default router;

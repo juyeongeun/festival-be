@@ -5,6 +5,8 @@ import passport from "../config/passportConfig.js";
 const router = express.Router();
 
 router.post("/", userController.create);
+router.post("/admin", userController.loginAdmin);
+router.post("/admin/join", userController.signupAdmin);
 router.post(
   "/logout",
   passport.authenticate("access-token", { session: false }),
@@ -35,15 +37,11 @@ router.post(
   },
   userController.refreshToken
 );
-router.delete(
-  "/me",
-  passport.authenticate("access-token", { session: false }),
-  userController.deleteMe
-);
-router.get(
-  "/me",
-  passport.authenticate("access-token", { session: false }),
-  userController.getMe
-);
+
+router
+  .route("/me")
+  .all(passport.authenticate("access-token", { session: false }))
+  .delete(userController.deleteMe)
+  .get(userController.getMe);
 
 export default router;
