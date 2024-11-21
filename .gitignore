@@ -12,6 +12,7 @@ prisma/migrations
 .DS_Store
 .AppleDouble
 .LSOverride
+test.http
 
 # Icon must end with two \r
 Icon
