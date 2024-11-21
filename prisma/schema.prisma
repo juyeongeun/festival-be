@@ -1,0 +1,224 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Provider {
+  KAKAO
+  GOOGLE
+  NAVER
+}
+
+enum Role {
+  ADMIN
+  USER
+  SELLER
+}
+
+enum BoardType {
+  LOSS
+  BOARD
+}
+
+enum LossType {
+  LOSS
+  GET
+  NULL
+}
+
+enum BoothType {
+  EAT
+  PLAY
+  ETC
+}
+
+enum Accept {
+  ACCEPT
+  REJECT
+  WAITING
+}
+
+enum PayType {
+  NAVERPAY
+  KAKAOPAY
+  TOSSPAY
+}
+
+model User {
+  id            Int             @id @default(autoincrement())
+  userName      String
+  password      String?
+  nickname      String?
+  provider      Provider? // 소셜 로그인 종류
+  providerId    String? // 해당 소셜 로그인의 고유 id
+  role          Role // 유저 역할
+  refreshToken  String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  participation Participation[]
+  notifications Notification[]
+  board         Board[]
+  comment       Comment[]
+  notice        Notice[]
+  booth         Booth[]
+  review        Review[]
+  wishList      WishList[]
+  pay           Pay[]
+}
+
+model Festival {
+  id            Int             @id @default(autoincrement())
+  festivalCode  Int
+  mapImage      String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  participation Participation[]
+  board         Board[]
+  booth         Booth[]
+}
+
+model Participation {
+  id           Int            @id @default(autoincrement())
+  userId       Int
+  festivalId   Int
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  festival     Festival       @relation(fields: [festivalId], references: [id])
+  user         User           @relation(fields: [userId], references: [id])
+  notification Notification[]
+}
+
+model Notification {
+  id              Int           @id @default(autoincrement())
+  participationId Int // 해당 축제 참여중인 유저
+  userId          Int
+  content         String
+  read            Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  participation   Participation @relation(fields: [participationId], references: [id])
+  user            User          @relation(fields: [userId], references: [id])
+}
+
+model Board {
+
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  festivalId Int
+  title      String
+  content    String
+  images     String[]  @default([])
+  boardType  BoardType
+  lossType   LossType  @default(NULL)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  user       User      @relation(fields: [userId], references: [id])
+  festival   Festival  @relation(fields: [festivalId], references: [id])
+  comments   Comment[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  userId    Int // 댓글 작성자 id
+  boardId   Int // 게시판 id
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  board     Board    @relation(fields: [boardId], references: [id])
+}
+
+model Notice {
+  id         Int      @id @default(autoincrement())
+  adminId    Int
+  festivalId Int
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  admin      User     @relation(fields: [adminId], references: [id])
+}
+
+model Booth {
+  id            Int        @id @default(autoincrement())
+  festivalId    Int
+  userId        Int
+  name          String //상호명
+  location      String? // 부스 위치
+  content       String // 부스 설명
+  image         String? // 부스 이미지
+  boothType     BoothType // 놀거리, 먹거리, 기타
+  typeCategory  String? // 분식, 체험, 한식, 양식, 설명회, 특산품 판매 등등
+  accept        Accept     @default(WAITING)
+  waitingTime   String?    @default("바로 가지러 오세요.")
+  accountNumber String? // 계좌
+  bankName      String? // 은행
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  festival      Festival   @relation(fields: [festivalId], references: [id])
+  user          User       @relation(fields: [userId], references: [id])
+  review        Review[]
+  menu          Menu[]
+  wishList      WishList[]
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  boothId   Int
+  content   String
+  score     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  booth     Booth    @relation(fields: [boothId], references: [id])
+}
+
+model Menu {
+  id        Int        @id @default(autoincrement())
+  boothId   Int
+  name      String
+  content   String?
+  image     String?
+  price     Int
+  soldOut   Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  booth     Booth      @relation(fields: [boothId], references: [id])
+  wishList  WishList[]
+}
+
+model WishList {
+  id        Int      @id @default(autoincrement())
+  menuId    Int
+  userId    Int
+  boothId   Int
+  cnt       Int
+  price     Int // 1개당 가격
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  menu      Menu     @relation(fields: [menuId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  booth     Booth    @relation(fields: [boothId], references: [id])
+}
+
+model Pay {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  boothId       Int
+  payType       PayType
+  price         Int
+  waitingNumber String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id])
+}
