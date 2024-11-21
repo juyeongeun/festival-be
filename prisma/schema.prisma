@@ -111,19 +111,20 @@ model Notification {
 }
 
 model Board {
-  id              Int           @id @default(autoincrement())
-  userId          Int
-  festivalId      Int
-  title           String
-  content         String
-  images          String[]      @default([])
-  boardType       BoardType
-  lossType        LossType      @default(NULL)
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  user            User          @relation(fields: [userId], references: [id])
-  festival        Festival      @relation(fields: [festivalId], references: [id])
-  comments        Comment[]
+
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  festivalId Int
+  title      String
+  content    String
+  images     String[]  @default([])
+  boardType  BoardType
+  lossType   LossType  @default(NULL)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  user       User      @relation(fields: [userId], references: [id])
+  festival   Festival  @relation(fields: [festivalId], references: [id])
+  comments   Comment[]
 }
 
 model Comment {
