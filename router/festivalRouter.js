@@ -1,8 +1,8 @@
 import express from "express";
-import { patchFestival } from "../controllers/festivalControllers.js";
+import patchFestivalController from "../controllers/festivalControllers.js";
 
 const router = express.Router();
 
-router.patch("/:festivalId", patchFestival);
+router.patch("/:festivalId", patchFestivalController.patchFestival);
 
 export default router;

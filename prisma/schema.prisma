@@ -111,6 +111,7 @@ model Notification {
 }
 
 model Board {
+
   id         Int       @id @default(autoincrement())
   userId     Int
   festivalId Int

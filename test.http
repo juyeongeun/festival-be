@@ -5,3 +5,39 @@ Content-Type: application/json
 {
   "mapImage" : "fffffsfs"
 }
+
+### 게시글 작성
+POST http://localhost:3001/1/board
+Content-Type: application/json
+
+{
+  "title" : "title test",
+  "content": "content test",
+  "boardType" : "BOARD",
+  "lossType" : "NULL",
+  "images" : ["http","https"]
+}
+
+### 게시글 조회
+GET http://localhost:3001/1/board
+Content-Type: application/json
+
+### 분실물 게시글 조회
+GET http://localhost:3001/1/board-loss
+Content-Type: application/json
+
+### 게시글 조회
+GET http://localhost:3001/1/board/1
+Content-Type: application/json
+
+### 게시글 수정
+PATCH http://localhost:3001/1/board/2
+Content-Type: application/json
+
+{
+  "lossType" : "GET"
+}
+
+### 게시글 삭제
+DELETE http://localhost:3001/1/board/7
+Content-Type: application/json
