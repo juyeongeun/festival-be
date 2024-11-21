@@ -1,0 +1,61 @@
+### 이미지 수정
+PATCH http://localhost:3001/festival/1
+Content-Type: application/json
+
+{
+  "mapImage" : "fffffsfs"
+}
+
+### 게시글 작성
+POST http://localhost:3001/1/board
+Content-Type: application/json
+Cookie: access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTczMjE2NjMwMCwiZXhwIjoxNzMyMTY5OTAwfQ.ig2oUU_hzpCbbLWYGY1_tdo5r8uTbRD3NL6suimXfBk; refresh-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTczMjE2NjMwMCwiZXhwIjoxNzMyNzcxMTAwfQ.19pGnMxBCCi2fk-ar8pQBuposqd8tsIxUmNogoQ362o
+
+{
+  "title" : "title test",
+  "content": "content test",
+  "boardType" : "BOARD",
+  "lossType" : "NULL",
+  "images" : ["http","https"]
+}
+
+### 게시글 조회
+GET http://localhost:3001/1/board
+Content-Type: application/json
+Cookie: access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTczMjE2NjMwMCwiZXhwIjoxNzMyMTY5OTAwfQ.ig2oUU_hzpCbbLWYGY1_tdo5r8uTbRD3NL6suimXfBk; refresh-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTczMjE2NjMwMCwiZXhwIjoxNzMyNzcxMTAwfQ.19pGnMxBCCi2fk-ar8pQBuposqd8tsIxUmNogoQ362o
+
+### 분실물 게시글 조회
+GET http://localhost:3001/1/board-loss
+Content-Type: application/json
+Cookie: access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTczMjE2NjMwMCwiZXhwIjoxNzMyMTY5OTAwfQ.ig2oUU_hzpCbbLWYGY1_tdo5r8uTbRD3NL6suimXfBk; refresh-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTczMjE2NjMwMCwiZXhwIjoxNzMyNzcxMTAwfQ.19pGnMxBCCi2fk-ar8pQBuposqd8tsIxUmNogoQ362o
+
+### 게시글 조회
+GET http://localhost:3001/1/board/1
+Content-Type: application/json
+Cookie: access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTczMjE2NjMwMCwiZXhwIjoxNzMyMTY5OTAwfQ.ig2oUU_hzpCbbLWYGY1_tdo5r8uTbRD3NL6suimXfBk; refresh-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTczMjE2NjMwMCwiZXhwIjoxNzMyNzcxMTAwfQ.19pGnMxBCCi2fk-ar8pQBuposqd8tsIxUmNogoQ362o
+
+### 게시글 수정
+PATCH http://localhost:3001/1/board/2
+Content-Type: application/json
+Cookie: access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTczMjE2NjMwMCwiZXhwIjoxNzMyMTY5OTAwfQ.ig2oUU_hzpCbbLWYGY1_tdo5r8uTbRD3NL6suimXfBk; refresh-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTczMjE2NjMwMCwiZXhwIjoxNzMyNzcxMTAwfQ.19pGnMxBCCi2fk-ar8pQBuposqd8tsIxUmNogoQ362o
+
+{
+  "lossType" : "GET"
+}
+
+### 게시글 삭제
+DELETE http://localhost:3001/1/board/7
+Content-Type: application/json
+Cookie: access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTczMjE2NjMwMCwiZXhwIjoxNzMyMTY5OTAwfQ.ig2oUU_hzpCbbLWYGY1_tdo5r8uTbRD3NL6suimXfBk; refresh-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTczMjE2NjMwMCwiZXhwIjoxNzMyNzcxMTAwfQ.19pGnMxBCCi2fk-ar8pQBuposqd8tsIxUmNogoQ362o
+
+
+### 로그인
+POST http://localhost:3001/user
+Content-Type: application/json
+
+{
+    "userName": "ju",
+    "nickname": "ju",
+    "provider": "KAKAO",
+    "providerId": "as23rew"
+}
