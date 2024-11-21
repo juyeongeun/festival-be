@@ -6,8 +6,7 @@ import boardService from "../services/boardServices.js";
 
 const deleteBoardController = asyncHandle(async (req, res, next) => {
   try {
-    // const { userId } = req.body;
-    const userId = 2;
+    const { id: userId } = req.user;
     const { festivalId, boardId } = req.params;
     const data = await boardService.deleteBoard(
       parseInt(userId),
@@ -22,8 +21,7 @@ const deleteBoardController = asyncHandle(async (req, res, next) => {
 
 const patchBoardController = asyncHandle(async (req, res, next) => {
   try {
-    // const { userId } = req.body;
-    const userId = 2;
+    const { id: userId } = req.user;
     const { festivalId, boardId } = req.params;
     const { title, content, images, boardType, lossType } = req.body;
 
@@ -45,8 +43,7 @@ const patchBoardController = asyncHandle(async (req, res, next) => {
 
 const getIdBoardController = asyncHandle(async (req, res, next) => {
   try {
-    // const { userId } = req.body;
-    const userId = 2;
+    const { id: userId } = req.user;
     const { festivalId, boardId } = req.params;
     const data = await boardService.getIdBoard(
       parseInt(festivalId),
@@ -61,8 +58,7 @@ const getIdBoardController = asyncHandle(async (req, res, next) => {
 
 const getLossBoardController = asyncHandle(async (req, res, next) => {
   try {
-    // const { userId } = req.body;
-    const userId = 2;
+    const { id: userId } = req.user;
     const { festivalId } = req.params;
     const { page, pageSize, orderBy, order } = req.query;
     const data = await boardService.getLossBoard(
@@ -81,8 +77,7 @@ const getLossBoardController = asyncHandle(async (req, res, next) => {
 
 const getBoardController = asyncHandle(async (req, res, next) => {
   try {
-    // const { userId } = req.body;
-    const userId = 2;
+    const { id: userId } = req.user;
     const { festivalId } = req.params;
     const { page, pageSize, orderBy, order } = req.query;
     const data = await boardService.getBoard(
@@ -100,8 +95,7 @@ const getBoardController = asyncHandle(async (req, res, next) => {
 });
 const createBoardController = asyncHandle(async (req, res, next) => {
   try {
-    // const { userId } = req.body;
-    const userId = 4;
+    const { id: userId } = req.user;
     const { festivalId } = req.params;
     const { title, content, images, boardType, lossType } = req.body;
 
