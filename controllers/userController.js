@@ -146,16 +146,85 @@ const changePassword = asyncHandle(async (req, res, next) => {
 const changeType = asyncHandle(async (req, res, next) => {
   try {
     const { role: role } = req.user;
+    const { type, boothId } = req.body;
     if (role !== "ADMIN") {
       return res.status(403).send({ message: "ADMIN만 변경할 수 있습니다." });
     }
 
-    await userService.updateUser(userId, {
-      role: SELLER,
-    });
+    await userService.updateUserBooth("SELLER", boothId, type);
+
     res.status(200).send({ message: "유저 타입이 변경되었습니다." });
   } catch (error) {
     next(error);
   }
 });
-export default { create, logout, changePassword, changeType };
+
+const refreshToken = asyncHandle(async (req, res, next) => {
+  try {
+    const { id: userId } = req.user;
+    const cookieString = req.headers.cookie;
+
+    const refreshToken = cookieString
+      .split("; ")
+      .find((cookie) => cookie.startsWith("refresh-token="))
+      .split("=")[1];
+
+    if (!refreshToken) {
+      return res.status(403).send({ message: "리프레쉬 토큰이 없습니다." });
+    }
+    const validationToken = await userService.refreshToken(
+      userId,
+      refreshToken
+    );
+    if (validationToken) {
+      const accessToken = userService.createToken(req.user);
+      const newRefreshToken = userService.createToken(req.user, "refresh");
+      const nextUser = await userService.updateUser(req.user.id, {
+        refreshToken: newRefreshToken,
+      });
+
+      res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
+      res.cookie(
+        "refresh-token",
+        newRefreshToken,
+        cookiesConfig.refreshTokenOption
+      );
+
+      res.status(200).send(nextUser);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+const getMe = asyncHandle(async (req, res, next) => {
+  try {
+    const { id: userId } = req.user;
+    const user = await userService.getUserById(userId);
+    res.status(200).send(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+const deleteMe = asyncHandle(async (req, res, next) => {
+  try {
+    const { id: userId } = req.user;
+    await userService.deleteUser(userId);
+    res.cookie("access-token", null, cookiesConfig.clearAccessTokenOption);
+    res.cookie("refresh-token", null, cookiesConfig.clearRefreshTokenOption);
+    res.status(200).send({ message: "회원 탈퇴 성공" });
+  } catch (error) {
+    next(error);
+  }
+});
+
+export default {
+  create,
+  logout,
+  changePassword,
+  changeType,
+  refreshToken,
+  getMe,
+  deleteMe,
+};

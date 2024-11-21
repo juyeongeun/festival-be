@@ -15,13 +15,35 @@ router.patch(
   passport.authenticate("access-token", { session: false }),
   userController.changePassword
 );
+
 router.patch(
   "/change-type",
   passport.authenticate("access-token", { session: false }),
   userController.changeType
 );
-// router.post("/refreshToken", userController.refreshToken());
-// router.delete("/me", userController.delete());
-// router.get("/me", userController.getMe());
+
+router.post(
+  "/refreshToken",
+  async (req, res, next) => {
+    passport.authenticate("refresh-token", { session: false }, (err, user) => {
+      if (err || !user) {
+        return res.status(403).send({ message: "토근만료" });
+      }
+      req.user = user;
+      next();
+    })(req, res, next);
+  },
+  userController.refreshToken
+);
+router.delete(
+  "/me",
+  passport.authenticate("access-token", { session: false }),
+  userController.deleteMe
+);
+router.get(
+  "/me",
+  passport.authenticate("access-token", { session: false }),
+  userController.getMe
+);
 
 export default router;

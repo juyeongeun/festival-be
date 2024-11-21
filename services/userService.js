@@ -1,6 +1,7 @@
 import userRepository from "../repositorys/userRepository.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { v4 as uuidv4 } from "uuid";
 
 const filterSensitiveUserData = (user) => {
   //리스폰스의 민감한 정보를 빼고 보낸다
@@ -87,6 +88,44 @@ const comparePassword = async (id, currentPassword, newPassword) => {
   return hashedPassword;
 };
 
+const refreshToken = async (userId, refreshToken) => {
+  const user = await userRepository.getUserById(userId);
+
+  if (!user) {
+    const error = new Error("Not found");
+    error.status = 404;
+    error.data = {
+      message: "등록된 사용자가 없습니다.",
+    };
+    throw error;
+  }
+
+  if (refreshToken !== user.refreshToken) {
+    const error = new Error("Forbidden");
+    error.status = 403;
+    error.data = {
+      message: "리프레쉬 토큰이 유효하지 않습니다.",
+    };
+    throw error;
+  }
+  return true;
+};
+
+const generateRandomString = () => {
+  return uuidv4(); // 유니크한 UUID 문자열 반환
+};
+
+const deleteUser = async (userId) => {
+  const userName = generateRandomString(10);
+  await userRepository.deleteUser(userId, userName);
+  return true;
+};
+
+const updateUserBooth = async (role, boothId, type) => {
+  const data = await userRepository.updateUserBooth(role, boothId, type);
+  return data;
+};
+
 export default {
   getNormalMe,
   getProviderMe,
@@ -96,4 +135,7 @@ export default {
   createProviderUser,
   getUserById,
   comparePassword,
+  refreshToken,
+  deleteUser,
+  updateUserBooth,
 };
