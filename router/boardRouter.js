@@ -4,39 +4,21 @@ import passport from "../config/passportConfig.js";
 
 const router = express.Router();
 
-router.post(
-  "/:festivalId/board",
-  passport.authenticate("access-token", { session: false }),
-  boardController.createBoard
-);
-router.get(
-  "/:festivalId/board",
-  passport.authenticate("access-token", { session: false }),
-  boardController.createBoard,
-  boardController.getBoard
-);
-router.get(
-  "/:festivalId/board/:boardId",
-  passport.authenticate("access-token", { session: false }),
-  boardController.createBoard,
-  boardController.getIdBoard
-);
-router.get(
-  "/:festivalId/board-loss",
-  passport.authenticate("access-token", { session: false }),
-  boardController.createBoard,
-  boardController.getLossBoard
-);
-router.patch(
-  "/:festivalId/board/:boardId",
-  passport.authenticate("access-token", { session: false }),
-  boardController.createBoard,
-  boardController.patchBoard
-);
-router.delete(
-  "/:festivalId/board/:boardId",
-  passport.authenticate("access-token", { session: false }),
-  boardController.createBoard,
-  boardController.deleteBoard
-);
+router
+  .route("/:festivalId/board")
+  .all(passport.authenticate("access-token", { session: false }))
+  .post(boardController.createBoard)
+  .get(boardController.getBoard);
+
+router
+  .route("/:festivalId/board/:boardId")
+  .all(passport.authenticate("access-token", { session: false }))
+  .patch(boardController.patchBoard)
+  .delete(boardController.deleteBoard)
+  .get(boardController.getIdBoard);
+
+router
+  .route("/:festivalId/board-loss")
+  .all(passport.authenticate("access-token", { session: false }))
+  .get(boardController.getLossBoard);
 export default router;
