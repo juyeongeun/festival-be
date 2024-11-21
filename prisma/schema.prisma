@@ -62,7 +62,7 @@ model User {
   provider      Provider? // 소셜 로그인 종류
   providerId    String? // 해당 소셜 로그인의 고유 id
   role          Role // 유저 역할
-  refreshToken  String
+  refreshToken  String?
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   participation Participation[]

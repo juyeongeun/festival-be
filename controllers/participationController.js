@@ -3,7 +3,7 @@ import asyncHandle from "../middleware/error/asyncHandler.js";
 
 const createParticipationController = asyncHandle(async (req, res, next) => {
   try {
-    const { userId } = req.body;
+    const { id: userId } = req.user;
     const { festivalId } = req.params;
     const participation = await participationService.createParticipation(
       parseInt(userId),

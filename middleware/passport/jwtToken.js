@@ -1,6 +1,8 @@
 import { Strategy as JwtStrategy } from "passport-jwt";
 import userService from "../../services/userService.js";
 
+const JWT_SECRET = process.env.JWT_SECRET;
+
 const accessExtractor = function (req) {
   const cookieString = req.headers.cookie;
   let accessToken = "";
