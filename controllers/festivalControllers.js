@@ -1,5 +1,6 @@
 import festivalService from "../services/festivalServices.js";
-export async function patchFestival(req, res, next) {
+import asyncHandle from "../middleware/error/asyncHandler.js";
+const patchFestivalController = asyncHandle(async (req, res, next) => {
   try {
     const { festivalId } = req.params;
     const { mapImage } = req.body;
@@ -12,4 +13,6 @@ export async function patchFestival(req, res, next) {
   } catch (error) {
     next(error);
   }
-}
+});
+
+export default { patchFestival: patchFestivalController };
