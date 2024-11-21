@@ -1,5 +1,6 @@
 import { Strategy as JwtStrategy } from "passport-jwt";
-import userService from "../../services/userService.js";
+// import userService from "../../services/userService.js";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
