@@ -59,7 +59,7 @@ const deleteUser = (userId, userName) => {
   });
 };
 
-const updateUserBooth = async (role, boothId, type) => {
+const updateUserBooth = async (role, boothId, type, location) => {
   const booth = await prisma.booth.findFirst({
     where: { id: boothId },
   });
@@ -75,7 +75,7 @@ const updateUserBooth = async (role, boothId, type) => {
     }),
       await pr.booth.update({
         where: { id: boothId },
-        data: { accept: type },
+        data: { accept: type, location: location },
       });
   });
 };
