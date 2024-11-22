@@ -121,8 +121,13 @@ const deleteUser = async (userId) => {
   return true;
 };
 
-const updateUserBooth = async (role, boothId, type) => {
-  const data = await userRepository.updateUserBooth(role, boothId, type);
+const updateUserBooth = async (role, boothId, type, location) => {
+  const data = await userRepository.updateUserBooth(
+    role,
+    boothId,
+    type,
+    location
+  );
   return data;
 };
 
