@@ -60,6 +60,41 @@ const getIdBoard = async (festivalId, userId, boardId) => {
   const data = await boardRepository.getIdBoard(boardId);
   return data;
 };
+
+const adminGetBoard = async (
+  festivalId,
+  userId,
+  page,
+  pageSize,
+  orderBy,
+  order,
+  keyword,
+  boardType,
+  userRole
+) => {
+  if (userRole !== "ADMIN") {
+    throw new Error("관리자가 아닙니다.");
+  }
+
+  const festivalUser = await boardRepository.participationCheck(
+    userId,
+    festivalId
+  );
+  if (!festivalUser) {
+    throw new Error("참여자가 아닙니다.");
+  }
+
+  const data = await boardRepository.adminGetBoard(
+    festivalId,
+    page,
+    pageSize,
+    orderBy,
+    order,
+    keyword,
+    boardType
+  );
+  return data;
+};
 const getLossBoard = async (
   festivalId,
   userId,
@@ -136,4 +171,5 @@ export default {
   getLossBoard,
   patchBoard,
   deleteBoard,
+  adminGetBoard,
 };

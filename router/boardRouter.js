@@ -5,20 +5,25 @@ import passport from "../config/passportConfig.js";
 const router = express.Router();
 
 router
-  .route("/:festivalId/board")
+  .route("/board/admin/:festivalId")
+  .all(passport.authenticate("access-token", { session: false }))
+  .get(boardController.adminGetBoard);
+router
+  .route("/board/:festivalId")
   .all(passport.authenticate("access-token", { session: false }))
   .post(boardController.createBoard)
   .get(boardController.getBoard);
 
 router
-  .route("/:festivalId/board/:boardId")
+  .route("/board/:boardId/:festivalId")
   .all(passport.authenticate("access-token", { session: false }))
   .patch(boardController.patchBoard)
   .delete(boardController.deleteBoard)
   .get(boardController.getIdBoard);
 
 router
-  .route("/:festivalId/board-loss")
+  .route("/board-loss/:festivalId")
   .all(passport.authenticate("access-token", { session: false }))
   .get(boardController.getLossBoard);
+
 export default router;
