@@ -5,6 +5,10 @@ import passport from "../config/passportConfig.js";
 const router = express.Router();
 
 router
+  .route("/:festivalId/board/admin")
+  .all(passport.authenticate("access-token", { session: false }))
+  .get(boardController.adminGetBoard);
+router
   .route("/:festivalId/board")
   .all(passport.authenticate("access-token", { session: false }))
   .post(boardController.createBoard)
@@ -21,4 +25,5 @@ router
   .route("/:festivalId/board-loss")
   .all(passport.authenticate("access-token", { session: false }))
   .get(boardController.getLossBoard);
+
 export default router;

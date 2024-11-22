@@ -1,5 +1,30 @@
 import Prisma from "../utils/prismaClient.js";
 
+const adminGetBoard = async (
+  festivalId,
+  page,
+  pageSize,
+  orderBy,
+  order,
+  keyword,
+  boardType
+) => {
+  const data = await Prisma.board.findMany({
+    where: {
+      festivalId: festivalId,
+      boardType: boardType,
+      title: {
+        contains: keyword,
+      },
+    },
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    orderBy: {
+      [orderBy]: order,
+    },
+  });
+  return data;
+};
 const deleteBoard = async (boardId) => {
   const data = await Prisma.board.delete({
     where: {
@@ -116,4 +141,5 @@ export {
   getLossBoard,
   patchBoard,
   deleteBoard,
+  adminGetBoard,
 };

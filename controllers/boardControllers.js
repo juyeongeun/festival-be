@@ -4,6 +4,27 @@ import boardService from "../services/boardServices.js";
 // 서비스 유효성
 // 레포지토리 디비
 
+const adminGetBoardController = asyncHandle(async (req, res, next) => {
+  try {
+    const { id: userId, role: userRole } = req.user;
+    const { festivalId } = req.params;
+    const { page, pageSize, orderBy, order, keyword, boardType } = req.query;
+    const data = await boardService.adminGetBoard(
+      parseInt(festivalId),
+      parseInt(userId),
+      parseInt(page) || 1,
+      parseInt(pageSize) || 4,
+      orderBy || "createdAt",
+      order || "asc",
+      keyword || undefined,
+      boardType || undefined,
+      userRole
+    );
+    res.status(200).send(data);
+  } catch (error) {
+    next(error);
+  }
+});
 const deleteBoardController = asyncHandle(async (req, res, next) => {
   try {
     const { id: userId } = req.user;
@@ -122,4 +143,5 @@ export default {
   getLossBoard: getLossBoardController,
   patchBoard: patchBoardController,
   deleteBoard: deleteBoardController,
+  adminGetBoard: adminGetBoardController,
 };
