@@ -33,4 +33,33 @@ const createBooth = asyncHandle(async (req, res, next) => {
   }
 });
 
-export default { createBooth };
+const getBoothAdmin = asyncHandle(async (req, res, next) => {
+  try {
+    const { role: userRole } = req.user;
+    const { festivalId } = req.params;
+    const {
+      page = 1,
+      pageSize = 5,
+      orderBy = "recent",
+      keyword = "",
+      type = "",
+    } = req.query;
+    if (userRole !== "ADMIN") {
+      return res.status(403).send("ADMIN 권한만 조회할 수 있습니다.");
+    }
+    const booths = await boothService.getBoothAdmin(
+      parseInt(festivalId),
+      parseInt(page),
+      parseInt(pageSize),
+      orderBy,
+      keyword,
+      type
+    );
+
+    res.status(200).send(booths);
+  } catch (error) {
+    next(error);
+  }
+});
+
+export default { createBooth, getBoothAdmin };

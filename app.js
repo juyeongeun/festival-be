@@ -14,10 +14,10 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/festival", festivalRouter);
-app.use("/", participationRouter);
+app.use("/participation", participationRouter);
 app.use("/user", userRouter);
-app.use("/", boardRouter);
-app.use("/", boothRouter);
+app.use("/board", boardRouter);
+app.use("/booth", boothRouter);
 
 app.use(errorHandler);
 

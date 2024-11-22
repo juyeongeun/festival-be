@@ -5,4 +5,22 @@ const createBooth = async (userId, festivalId, data) => {
   return booth;
 };
 
-export default { createBooth };
+const getBoothAdmin = async (
+  festivalId,
+  page,
+  pageSize,
+  orderBy,
+  keyword,
+  type
+) => {
+  return await boothRepository.getBoothAdmin(
+    festivalId,
+    page,
+    pageSize,
+    orderBy,
+    keyword,
+    type
+  );
+};
+
+export default { createBooth, getBoothAdmin };

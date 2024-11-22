@@ -5,7 +5,7 @@ import passport from "../config/passportConfig.js";
 const router = express.Router();
 
 router
-  .route("/:festivalId/participation")
+  .route("/:festivalId")
   .all(passport.authenticate("access-token", { session: false }))
   .post(participationController.createParticipation);
 
