@@ -12,10 +12,8 @@ router
 
 router
   .route("/:festivalId")
-  .all(
-    passport.authenticate("access-token", { session: false }),
-    boothValidation
-  )
-  .post(boothController.createBooth);
+  .all(passport.authenticate("access-token", { session: false }))
+  .post(boothValidation, boothController.createBooth)
+  .get(boothController.getBooths);
 
 export default router;

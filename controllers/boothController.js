@@ -44,10 +44,9 @@ const getBoothAdmin = asyncHandle(async (req, res, next) => {
       keyword = "",
       type = "",
     } = req.query;
-    if (userRole !== "ADMIN") {
-      return res.status(403).send("ADMIN 권한만 조회할 수 있습니다.");
-    }
+
     const booths = await boothService.getBoothAdmin(
+      userRole,
       parseInt(festivalId),
       parseInt(page),
       parseInt(pageSize),
@@ -62,4 +61,33 @@ const getBoothAdmin = asyncHandle(async (req, res, next) => {
   }
 });
 
-export default { createBooth, getBoothAdmin };
+const getBooths = asyncHandle(async (req, res, next) => {
+  try {
+    const { festivalId } = req.params;
+    const { id: userId } = req.user;
+
+    const {
+      page = 1,
+      pageSize = 5,
+      orderBy = "recent",
+      keyword = "",
+      type = "",
+    } = req.query;
+
+    const booths = await boothService.getBooths(
+      parseInt(festivalId),
+      parseInt(userId),
+      parseInt(page),
+      parseInt(pageSize),
+      orderBy,
+      keyword,
+      type
+    );
+
+    res.status(200).send(booths);
+  } catch (error) {
+    next(error);
+  }
+});
+
+export default { createBooth, getBoothAdmin, getBooths };
