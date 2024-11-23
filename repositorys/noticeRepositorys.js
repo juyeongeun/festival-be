@@ -1,7 +1,27 @@
 import prisma from "../utils/prismaClient.js";
 
-const getNotice = async (festivalId, page, pageSize, orderBy, order) => {
-  const data = await prisma.notice.findMany({
+const deleteNotice = (noticeId) => {
+  const data = prisma.notice.delete({
+    where: {
+      id: noticeId,
+    },
+  });
+  return data;
+};
+const patchNotice = (userId, noticeId, content) => {
+  const data = prisma.notice.update({
+    where: {
+      id: noticeId,
+    },
+    data: {
+      adminId: userId,
+      content: content,
+    },
+  });
+  return data;
+};
+const getNotice = (festivalId, page, pageSize, orderBy, order) => {
+  const data = prisma.notice.findMany({
     where: {
       festivalId: festivalId,
     },
@@ -14,8 +34,8 @@ const getNotice = async (festivalId, page, pageSize, orderBy, order) => {
   return data;
 };
 
-const createNotice = async (userId, festivalId, content) => {
-  const data = await prisma.notice.create({
+const createNotice = (userId, festivalId, content) => {
+  const data = prisma.notice.create({
     data: {
       adminId: userId,
       festivalId: festivalId,
@@ -24,4 +44,4 @@ const createNotice = async (userId, festivalId, content) => {
   });
   return data;
 };
-export { getNotice, createNotice };
+export { getNotice, createNotice, patchNotice, deleteNotice };

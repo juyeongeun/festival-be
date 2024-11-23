@@ -7,11 +7,13 @@ const router = express.Router();
 router
   .route("/:festivalId")
   .all(passport.authenticate("access-token", { session: false }))
-  .get(noticeController.getNotice);
+  .get(noticeController.getNotice)
+  .post(noticeController.createNotice);
 
 router
-  .route("/:festivalId")
+  .route("/:noticeId/:festivalId")
   .all(passport.authenticate("access-token", { session: false }))
-  .post(noticeController.createNotice);
+  .patch(noticeController.patchNotice)
+  .delete(noticeController.deleteNotice);
 
 export default router;
