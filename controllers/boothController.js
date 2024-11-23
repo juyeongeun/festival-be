@@ -131,4 +131,84 @@ const getBooth = asyncHandle(async (req, res, next) => {
   }
 });
 
-export default { createBooth, getBoothAdmin, getBooths, getBooth };
+const updateBooth = asyncHandle(async (req, res, next) => {
+  try {
+    const { id: userId } = req.user;
+    const { festivalId, boothId } = req.params;
+    const {
+      name,
+      content,
+      image,
+      boothType,
+      typeCategory,
+      accountNumber,
+      bankName,
+      waitingTime,
+    } = req.body;
+
+    const isParticipated = await participationRepository.participationCheck(
+      parseInt(userId),
+      parseInt(festivalId)
+    );
+
+    if (!isParticipated) {
+      return res.status(403).send("참여중인 축제가 아닙니다.");
+    }
+
+    const booth = await boothService.updateBooth(
+      parseInt(boothId),
+      parseInt(userId),
+      {
+        name,
+        content,
+        image,
+        boothType,
+        typeCategory,
+        accountNumber,
+        bankName,
+        waitingTime,
+      }
+    );
+    res.status(200).send(booth);
+  } catch (error) {
+    next(error);
+  }
+});
+
+const getMyBooths = asyncHandle(async (req, res, next) => {
+  try {
+    const { id: userId } = req.user;
+    const { festivalId } = req.params;
+
+    const isParticipated = await participationRepository.participationCheck(
+      parseInt(userId),
+      parseInt(festivalId)
+    );
+
+    if (!isParticipated) {
+      return res.status(403).send("참여중인 축제가 아닙니다.");
+    }
+
+    const booths = await boothService.getMyBooths(
+      parseInt(userId),
+      parseInt(festivalId)
+    );
+
+    if (booths.length == 0) {
+      return res.status(404).send("등록된 나의 부스가 없습니다.");
+    }
+
+    res.status(200).send(booths);
+  } catch (error) {
+    next(error);
+  }
+});
+
+export default {
+  createBooth,
+  getBoothAdmin,
+  getBooths,
+  getBooth,
+  updateBooth,
+  getMyBooths,
+};

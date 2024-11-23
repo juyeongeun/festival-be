@@ -130,4 +130,45 @@ const getBooth = (boothId) => {
   });
 };
 
-export default { createBooth, getBoothAdmin, getBooths, getBooth };
+const updateBooth = (boothId, data) => {
+  return prisma.booth.update({
+    where: {
+      id: boothId,
+    },
+    data,
+  });
+};
+
+const getMyBooths = (userId, festivalId) => {
+  return prisma.booth.findMany({
+    where: {
+      userId: userId,
+      festivalId: festivalId,
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          userName: true,
+          nickname: true,
+          role: true,
+        },
+      },
+      festival: {
+        select: {
+          id: true,
+          festivalCode: true,
+          mapImage: true,
+        },
+      },
+    },
+  });
+};
+export default {
+  createBooth,
+  getBoothAdmin,
+  getBooths,
+  getBooth,
+  updateBooth,
+  getMyBooths,
+};

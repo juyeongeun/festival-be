@@ -45,4 +45,24 @@ const getBooth = async (boothId) => {
   return await boothRepository.getBooth(boothId);
 };
 
-export default { createBooth, getBoothAdmin, getBooths, getBooth };
+const updateBooth = async (boothId, userId, data) => {
+  const boothUser = await boothRepository.getMyBooths(userId);
+
+  if (boothUser[0].userId !== userId) {
+    throw new Error("해당 부스 소유자만 수정할 수 있습니다.");
+  }
+  return await boothRepository.updateBooth(boothId, data);
+};
+
+const getMyBooths = async (userId, festivalId) => {
+  return await boothRepository.getMyBooths(userId, festivalId);
+};
+
+export default {
+  createBooth,
+  getBoothAdmin,
+  getBooths,
+  getBooth,
+  updateBooth,
+  getMyBooths,
+};

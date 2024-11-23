@@ -6,6 +6,11 @@ import boothValidation from "../middleware/booth/boothValidation.js";
 const router = express.Router();
 
 router
+  .route("/my-booth/:festivalId")
+  .all(passport.authenticate("access-token", { session: false }))
+  .get(boothController.getMyBooths);
+
+router
   .route("/admin/:festivalId")
   .all(passport.authenticate("access-token", { session: false }))
   .get(boothController.getBoothAdmin);
@@ -19,6 +24,7 @@ router
 router
   .route("/:boothId/:festivalId")
   .all(passport.authenticate("access-token", { session: false }))
-  .get(boothController.getBooth);
+  .get(boothController.getBooth)
+  .patch(boothController.updateBooth);
 
 export default router;
