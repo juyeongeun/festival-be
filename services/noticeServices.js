@@ -1,5 +1,5 @@
 import * as noticeRepository from "../repositorys/noticeRepositorys.js";
-import participationRepository from "../repositorys/participationRepositorys.js";
+import participationRepository from "../repositorys/participationRepository.js";
 
 const deleteNotice = async (userId, festivalId, noticeId, userRole) => {
   if (userRole !== "ADMIN") {
