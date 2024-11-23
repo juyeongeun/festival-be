@@ -164,6 +164,14 @@ const getMyBooths = (userId, festivalId) => {
     },
   });
 };
+
+const deleteBooth = (boothId) => {
+  return prisma.booth.delete({
+    where: {
+      id: boothId,
+    },
+  });
+};
 export default {
   createBooth,
   getBoothAdmin,
@@ -171,4 +179,5 @@ export default {
   getBooth,
   updateBooth,
   getMyBooths,
+  deleteBooth,
 };

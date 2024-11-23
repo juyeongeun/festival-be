@@ -204,6 +204,33 @@ const getMyBooths = asyncHandle(async (req, res, next) => {
   }
 });
 
+const deleteBooth = asyncHandle(async (req, res, next) => {
+  try {
+    const { id: userId } = req.user;
+    const { festivalId, boothId } = req.params;
+
+    const isParticipated = await participationRepository.participationCheck(
+      parseInt(userId),
+      parseInt(festivalId)
+    );
+
+    if (!isParticipated) {
+      return res.status(403).send("참여중인 축제가 아닙니다.");
+    }
+
+    const booth = await boothService.getBooth(parseInt(boothId));
+    if (booth.userId !== userId) {
+      return res.status(403).send("부스 소유자만 삭제할 수 있습니다.");
+    }
+
+    await boothService.deleteBooth(parseInt(boothId));
+
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default {
   createBooth,
   getBoothAdmin,
@@ -211,4 +238,5 @@ export default {
   getBooth,
   updateBooth,
   getMyBooths,
+  deleteBooth,
 };

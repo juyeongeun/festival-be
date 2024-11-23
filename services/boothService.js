@@ -58,6 +58,10 @@ const getMyBooths = async (userId, festivalId) => {
   return await boothRepository.getMyBooths(userId, festivalId);
 };
 
+const deleteBooth = async (boothId) => {
+  return await boothRepository.deleteBooth(boothId);
+};
+
 export default {
   createBooth,
   getBoothAdmin,
@@ -65,4 +69,5 @@ export default {
   getBooth,
   updateBooth,
   getMyBooths,
+  deleteBooth,
 };

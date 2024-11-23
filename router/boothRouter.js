@@ -25,6 +25,7 @@ router
   .route("/:boothId/:festivalId")
   .all(passport.authenticate("access-token", { session: false }))
   .get(boothController.getBooth)
-  .patch(boothController.updateBooth);
+  .patch(boothController.updateBooth)
+  .delete(boothController.deleteBooth);
 
 export default router;
