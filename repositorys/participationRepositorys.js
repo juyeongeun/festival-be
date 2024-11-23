@@ -17,4 +17,14 @@ const createParticipation = (userId, festivalId) => {
   });
 };
 
-export default { createParticipation };
+const participationCheck = async (userId, festivalId) => {
+  const data = await prisma.participation.findFirst({
+    where: {
+      festivalId: festivalId,
+      userId: userId,
+    },
+  });
+  return data;
+};
+
+export default { createParticipation, participationCheck };

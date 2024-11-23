@@ -1,4 +1,4 @@
-import participationRepository from "../repositorys/participationRepositoy.js";
+import participationRepository from "../repositorys/participationRepositorys.js";
 
 const createParticipation = async (userId, festivalId) => {
   const participation = await participationRepository.createParticipation(

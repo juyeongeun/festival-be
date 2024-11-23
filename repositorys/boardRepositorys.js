@@ -1,4 +1,4 @@
-import Prisma from "../utils/prismaClient.js";
+import prisma from "../utils/prismaClient.js";
 
 const adminGetBoard = async (
   festivalId,
@@ -9,7 +9,7 @@ const adminGetBoard = async (
   keyword,
   boardType
 ) => {
-  const data = await Prisma.board.findMany({
+  const data = await prisma.board.findMany({
     where: {
       festivalId: festivalId,
       boardType: boardType,
@@ -26,7 +26,7 @@ const adminGetBoard = async (
   return data;
 };
 const deleteBoard = async (boardId) => {
-  const data = await Prisma.board.delete({
+  const data = await prisma.board.delete({
     where: {
       id: boardId,
     },
@@ -41,7 +41,7 @@ const patchBoard = async (
   boardType,
   lossType
 ) => {
-  const data = await Prisma.board.update({
+  const data = await prisma.board.update({
     where: {
       id: boardId,
     },
@@ -56,7 +56,7 @@ const patchBoard = async (
   return data;
 };
 const getIdBoard = async (boardId) => {
-  const data = await Prisma.board.findUnique({
+  const data = await prisma.board.findUnique({
     where: {
       id: boardId,
     },
@@ -65,7 +65,7 @@ const getIdBoard = async (boardId) => {
 };
 
 const getLossBoard = async (festivalId, page, pageSize, orderBy, order) => {
-  const data = await Prisma.board.findMany({
+  const data = await prisma.board.findMany({
     where: {
       festivalId: festivalId,
       boardType: "LOSS",
@@ -79,7 +79,7 @@ const getLossBoard = async (festivalId, page, pageSize, orderBy, order) => {
   return data;
 };
 const getBoard = async (festivalId, page, pageSize, orderBy, order) => {
-  const data = await Prisma.board.findMany({
+  const data = await prisma.board.findMany({
     where: {
       festivalId: festivalId,
       boardType: "BOARD",
@@ -102,7 +102,7 @@ const createBoard = async (
   boardType,
   lossType
 ) => {
-  const data = await Prisma.board.create({
+  const data = await prisma.board.create({
     data: {
       user: {
         connect: {
@@ -123,19 +123,9 @@ const createBoard = async (
   });
   return data;
 };
-const participationCheck = async (userId, festivalId) => {
-  const data = await Prisma.participation.findFirst({
-    where: {
-      festivalId: festivalId,
-      userId: userId,
-    },
-  });
-  return data;
-};
 
 export {
   createBoard,
-  participationCheck,
   getBoard,
   getIdBoard,
   getLossBoard,
