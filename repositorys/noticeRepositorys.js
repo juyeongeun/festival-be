@@ -14,4 +14,14 @@ const getNotice = async (festivalId, page, pageSize, orderBy, order) => {
   return data;
 };
 
-export { getNotice };
+const createNotice = async (userId, festivalId, content) => {
+  const data = await prisma.notice.create({
+    data: {
+      adminId: userId,
+      festivalId: festivalId,
+      content: content,
+    },
+  });
+  return data;
+};
+export { getNotice, createNotice };

@@ -20,4 +20,24 @@ const getNoticeController = asyncHandle(async (req, res, next) => {
   }
 });
 
-export default { getNotice: getNoticeController };
+const createNoticeController = asyncHandle(async (req, res, next) => {
+  try {
+    const { id: userId, role: userRole } = req.user;
+    const { festivalId } = req.params;
+    const { content } = req.body;
+    const data = await noticeService.createNotice(
+      parseInt(userId),
+      parseInt(festivalId),
+      userRole,
+      content
+    );
+    res.status(200).send(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+export default {
+  getNotice: getNoticeController,
+  createNotice: createNoticeController,
+};

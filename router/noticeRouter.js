@@ -9,4 +9,9 @@ router
   .all(passport.authenticate("access-token", { session: false }))
   .get(noticeController.getNotice);
 
+router
+  .route("/:festivalId")
+  .all(passport.authenticate("access-token", { session: false }))
+  .post(noticeController.createNotice);
+
 export default router;

@@ -1,6 +1,6 @@
 import prisma from "../utils/prismaClient.js";
 
-const adminGetBoard = async (
+const adminGetBoard = (
   festivalId,
   page,
   pageSize,
@@ -9,7 +9,7 @@ const adminGetBoard = async (
   keyword,
   boardType
 ) => {
-  const data = await prisma.board.findMany({
+  const data = prisma.board.findMany({
     where: {
       festivalId: festivalId,
       boardType: boardType,
@@ -25,23 +25,16 @@ const adminGetBoard = async (
   });
   return data;
 };
-const deleteBoard = async (boardId) => {
-  const data = await prisma.board.delete({
+const deleteBoard = (boardId) => {
+  const data = prisma.board.delete({
     where: {
       id: boardId,
     },
   });
   return data;
 };
-const patchBoard = async (
-  boardId,
-  title,
-  content,
-  images,
-  boardType,
-  lossType
-) => {
-  const data = await prisma.board.update({
+const patchBoard = (boardId, title, content, images, boardType, lossType) => {
+  const data = prisma.board.update({
     where: {
       id: boardId,
     },
@@ -55,8 +48,8 @@ const patchBoard = async (
   });
   return data;
 };
-const getIdBoard = async (boardId) => {
-  const data = await prisma.board.findUnique({
+const getIdBoard = (boardId) => {
+  const data = prisma.board.findUnique({
     where: {
       id: boardId,
     },
@@ -64,8 +57,8 @@ const getIdBoard = async (boardId) => {
   return data;
 };
 
-const getLossBoard = async (festivalId, page, pageSize, orderBy, order) => {
-  const data = await prisma.board.findMany({
+const getLossBoard = (festivalId, page, pageSize, orderBy, order) => {
+  const data = prisma.board.findMany({
     where: {
       festivalId: festivalId,
       boardType: "LOSS",
@@ -78,8 +71,8 @@ const getLossBoard = async (festivalId, page, pageSize, orderBy, order) => {
   });
   return data;
 };
-const getBoard = async (festivalId, page, pageSize, orderBy, order) => {
-  const data = await prisma.board.findMany({
+const getBoard = (festivalId, page, pageSize, orderBy, order) => {
+  const data = prisma.board.findMany({
     where: {
       festivalId: festivalId,
       boardType: "BOARD",
@@ -93,7 +86,7 @@ const getBoard = async (festivalId, page, pageSize, orderBy, order) => {
   return data;
 };
 
-const createBoard = async (
+const createBoard = (
   userId,
   festivalId,
   title,
@@ -102,7 +95,7 @@ const createBoard = async (
   boardType,
   lossType
 ) => {
-  const data = await prisma.board.create({
+  const data = prisma.board.create({
     data: {
       user: {
         connect: {
