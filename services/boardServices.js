@@ -1,7 +1,7 @@
 import * as boardRepository from "../repositorys/boardRepositorys.js";
-
+import * as participationRepository from "../repositorys/participationRepositorys.js";
 const deleteBoard = async (userId, festivalId, boardId) => {
-  const festivalUser = await boardRepository.participationCheck(
+  const festivalUser = await participationRepository.participationCheck(
     userId,
     festivalId
   );
@@ -26,7 +26,7 @@ const patchBoard = async (
   boardType,
   lossType
 ) => {
-  const festivalUser = await boardRepository.participationCheck(
+  const festivalUser = await participationRepository.participationCheck(
     userId,
     festivalId
   );
@@ -50,7 +50,7 @@ const patchBoard = async (
   return data;
 };
 const getIdBoard = async (festivalId, userId, boardId) => {
-  const festivalUser = await boardRepository.participationCheck(
+  const festivalUser = await participationRepository.participationCheck(
     userId,
     festivalId
   );
@@ -76,7 +76,7 @@ const adminGetBoard = async (
     throw new Error("관리자가 아닙니다.");
   }
 
-  const festivalUser = await boardRepository.participationCheck(
+  const festivalUser = await participationRepository.participationCheck(
     userId,
     festivalId
   );
@@ -103,7 +103,7 @@ const getLossBoard = async (
   orderBy,
   order
 ) => {
-  const festivalUser = await boardRepository.participationCheck(
+  const festivalUser = await participationRepository.participationCheck(
     userId,
     festivalId
   );
@@ -120,7 +120,7 @@ const getLossBoard = async (
   return data;
 };
 const getBoard = async (festivalId, userId, page, pageSize, orderBy, order) => {
-  const festivalUser = await boardRepository.participationCheck(
+  const festivalUser = await participationRepository.participationCheck(
     userId,
     festivalId
   );
@@ -145,7 +145,7 @@ const createBoard = async (
   boardType,
   lossType
 ) => {
-  const festivalUser = await boardRepository.participationCheck(
+  const festivalUser = await participationRepository.participationCheck(
     userId,
     festivalId
   );

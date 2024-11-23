@@ -7,6 +7,7 @@ import participationRouter from "./router/participationRouter.js";
 import userRouter from "./router/userRouter.js";
 import boardRouter from "./router/boardRouter.js";
 import boothRouter from "./router/boothRouter.js";
+import noticeRouter from "./router/noticeRouter.js";
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,7 @@ app.use("/participation", participationRouter);
 app.use("/user", userRouter);
 app.use("/board", boardRouter);
 app.use("/booth", boothRouter);
+app.use("/notice", noticeRouter);
 
 app.use(errorHandler);
 
