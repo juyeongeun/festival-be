@@ -36,8 +36,20 @@ const createBooth = asyncHandle(async (req, res, next) => {
 
 const getBoothAdmin = asyncHandle(async (req, res, next) => {
   try {
-    const { role: userRole } = req.user;
+    const { id: adminId, role: userRole } = req.user;
     const { festivalId } = req.params;
+
+    const isParticipated = await participationRepository.participationCheck(
+      parseInt(adminId),
+      parseInt(festivalId)
+    );
+    if (!isParticipated) {
+      return res.status(403).send("참여중인 축제가 아닙니다.");
+    }
+
+    if (userRole !== "ADMIN") {
+      return res.status(403).send("ADMIN 권한만 조회할 수 있습니다.");
+    }
     const {
       page = 1,
       pageSize = 5,
@@ -47,7 +59,6 @@ const getBoothAdmin = asyncHandle(async (req, res, next) => {
     } = req.query;
 
     const booths = await boothService.getBoothAdmin(
-      userRole,
       parseInt(festivalId),
       parseInt(page),
       parseInt(pageSize),
@@ -98,4 +109,26 @@ const getBooths = asyncHandle(async (req, res, next) => {
   }
 });
 
-export default { createBooth, getBoothAdmin, getBooths };
+const getBooth = asyncHandle(async (req, res, next) => {
+  try {
+    const { boothId, festivalId } = req.params;
+    const { id: userId } = req.user;
+
+    const isParticipated = await participationRepository.participationCheck(
+      parseInt(userId),
+      parseInt(festivalId)
+    );
+
+    if (!isParticipated) {
+      return res.status(403).send("참여중인 축제가 아닙니다.");
+    }
+
+    const booth = await boothService.getBooth(parseInt(boothId));
+
+    res.status(200).send(booth);
+  } catch (error) {
+    next(error);
+  }
+});
+
+export default { createBooth, getBoothAdmin, getBooths, getBooth };

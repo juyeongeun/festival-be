@@ -7,16 +7,12 @@ const createBooth = async (userId, festivalId, data) => {
 
 const getBoothAdmin = async (
   festivalId,
-  userRole,
   page,
   pageSize,
   orderBy,
   keyword,
   type
 ) => {
-  if (userRole !== "ADMIN") {
-    return res.status(403).send("ADMIN 권한만 조회할 수 있습니다.");
-  }
   return await boothRepository.getBoothAdmin(
     festivalId,
     page,
@@ -45,4 +41,8 @@ const getBooths = async (
   );
 };
 
-export default { createBooth, getBoothAdmin, getBooths };
+const getBooth = async (boothId) => {
+  return await boothRepository.getBooth(boothId);
+};
+
+export default { createBooth, getBoothAdmin, getBooths, getBooth };

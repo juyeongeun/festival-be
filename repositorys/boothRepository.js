@@ -52,7 +52,14 @@ const getBoothAdmin = (festivalId, page, pageSize, orderBy, keyword, type) => {
     skip,
     orderBy: { createdAt: orderBy == "recent" ? "desc" : "asc" },
     include: {
-      user: true,
+      user: {
+        select: {
+          id: true,
+          userName: true,
+          nickname: true,
+          role: true,
+        },
+      },
       festival: true,
     },
   });
@@ -93,10 +100,34 @@ const getBooths = (festivalId, page, pageSize, orderBy, keyword, type) => {
     skip,
     orderBy: { createdAt: orderBy == "recent" ? "desc" : "asc" },
     include: {
-      user: true,
-      festival: true,
+      user: {
+        select: {
+          id: true,
+          userName: true,
+          nickname: true,
+          role: true,
+        },
+      },
     },
   });
 };
 
-export default { createBooth, getBoothAdmin, getBooths };
+const getBooth = (boothId) => {
+  return prisma.booth.findUnique({
+    where: {
+      id: boothId,
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          userName: true,
+          nickname: true,
+          role: true,
+        },
+      },
+    },
+  });
+};
+
+export default { createBooth, getBoothAdmin, getBooths, getBooth };

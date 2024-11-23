@@ -16,4 +16,9 @@ router
   .post(boothValidation, boothController.createBooth)
   .get(boothController.getBooths);
 
+router
+  .route("/:boothId/:festivalId")
+  .all(passport.authenticate("access-token", { session: false }))
+  .get(boothController.getBooth);
+
 export default router;
