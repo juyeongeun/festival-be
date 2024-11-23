@@ -1,5 +1,6 @@
 import boothService from "../services/boothService.js";
 import asyncHandle from "../middleware/error/asyncHandler.js";
+import participationRepository from "../repositorys/participationRepository.js";
 
 const createBooth = asyncHandle(async (req, res, next) => {
   try {
@@ -66,6 +67,14 @@ const getBooths = asyncHandle(async (req, res, next) => {
     const { festivalId } = req.params;
     const { id: userId } = req.user;
 
+    const isParticipated = await participationRepository.participationCheck(
+      parseInt(userId),
+      parseInt(festivalId)
+    );
+    if (!isParticipated) {
+      return res.status(403).send("참여중인 축제가 아닙니다.");
+    }
+
     const {
       page = 1,
       pageSize = 5,
@@ -76,7 +85,6 @@ const getBooths = asyncHandle(async (req, res, next) => {
 
     const booths = await boothService.getBooths(
       parseInt(festivalId),
-      parseInt(userId),
       parseInt(page),
       parseInt(pageSize),
       orderBy,
