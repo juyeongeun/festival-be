@@ -1,7 +1,7 @@
-import * as festivalRepositorys from "../repositorys/festivalRepositorys.js";
+import * as festivalRepository from "../repositorys/festivalRepository.js";
 
 const patchFestivalImg = async (festivalId, mapImage) => {
-  const festivalPatch = await festivalRepositorys.festivalImagePatch(
+  const festivalPatch = await festivalRepository.festivalImagePatch(
     festivalId,
     mapImage
   );
