@@ -10,4 +10,9 @@ router
   .post(commentController.createComment)
   .get(commentController.getComments);
 
+router
+  .route("/:commentId/:festivalId")
+  .all(passport.authenticate("access-token", { session: false }))
+  .patch(commentController.updateComment);
+
 export default router;

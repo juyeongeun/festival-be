@@ -4,7 +4,7 @@ import asyncHandle from "../middleware/error/asyncHandler.js";
 const createComment = asyncHandle(async (req, res, next) => {
   try {
     const { id: userId } = req.user;
-    const { festivalId, boardId } = req.params;
+    const { boardId, festivalId } = req.params;
     const { content } = req.body;
     const data = await commentService.createComment(
       parseInt(userId),
@@ -20,7 +20,7 @@ const createComment = asyncHandle(async (req, res, next) => {
 
 const getComments = asyncHandle(async (req, res, next) => {
   try {
-    const { festivalId, boardId } = req.params;
+    const { boardId, festivalId } = req.params;
     const { id: userId } = req.user;
     const { page = 1, pageSize = 5, orderBy = "recent" } = req.query;
     const data = await commentService.getComments(
@@ -37,4 +37,21 @@ const getComments = asyncHandle(async (req, res, next) => {
   }
 });
 
-export default { createComment, getComments };
+const updateComment = asyncHandle(async (req, res, next) => {
+  try {
+    const { commentId, festivalId } = req.params;
+    const { content } = req.body;
+    const { id: userId } = req.user;
+    const data = await commentService.updateComment(
+      parseInt(commentId),
+      parseInt(festivalId),
+      parseInt(userId),
+      content
+    );
+    return res.status(200).send(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+export default { createComment, getComments, updateComment };

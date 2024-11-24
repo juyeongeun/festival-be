@@ -42,4 +42,31 @@ const getComments = (boardId, page, pageSize, orderBy) => {
     },
   });
 };
-export default { createComment, getComments };
+
+const getById = (commentId) => {
+  return prisma.comment.findUnique({
+    where: {
+      id: commentId,
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          userName: true,
+        },
+      },
+    },
+  });
+};
+
+const updateComment = (commentId, content) => {
+  return prisma.comment.update({
+    where: {
+      id: commentId,
+    },
+    data: {
+      content: content,
+    },
+  });
+};
+export default { createComment, getComments, getById, updateComment };
