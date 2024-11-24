@@ -8,6 +8,7 @@ import userRouter from "./router/userRouter.js";
 import boardRouter from "./router/boardRouter.js";
 import boothRouter from "./router/boothRouter.js";
 import noticeRouter from "./router/noticeRouter.js";
+import commentRouter from "./router/commentRouter.js";
 
 dotenv.config();
 const app = express();
@@ -20,6 +21,7 @@ app.use("/user", userRouter);
 app.use("/board", boardRouter);
 app.use("/booth", boothRouter);
 app.use("/notice", noticeRouter);
+app.use("/comment", commentRouter);
 
 app.use(errorHandler);
 
