@@ -129,13 +129,16 @@ const changePassword = asyncHandle(async (req, res, next) => {
 
 const changeType = asyncHandle(async (req, res, next) => {
   try {
-    const { role: role } = req.user;
+    const { role: userRole } = req.user;
     const { type, boothId, location } = req.body;
-    if (role !== "ADMIN") {
-      return res.status(403).send({ message: "ADMIN만 변경할 수 있습니다." });
-    }
 
-    await userService.updateUserBooth("SELLER", boothId, type, location);
+    await userService.updateUserBooth(
+      "SELLER",
+      boothId,
+      type,
+      location,
+      userRole
+    );
 
     res.status(200).send({ message: "유저 타입이 변경되었습니다." });
   } catch (error) {

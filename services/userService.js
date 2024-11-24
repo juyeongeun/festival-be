@@ -121,7 +121,10 @@ const deleteUser = async (userId) => {
   return true;
 };
 
-const updateUserBooth = async (role, boothId, type, location) => {
+const updateUserBooth = async (role, boothId, type, location, userRole) => {
+  if (userRole !== "ADMIN") {
+    throw new Error("ADMIN만 변경할 수 있습니다.");
+  }
   const data = await userRepository.updateUserBooth(
     role,
     boothId,
