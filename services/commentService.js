@@ -56,4 +56,19 @@ const updateComment = async (commentId, festivalId, userId, content) => {
   return await commentRepository.updateComment(commentId, content);
 };
 
-export default { createComment, getComments, updateComment };
+const deleteComment = async (commentId, festivalId, userId, userRole) => {
+  const isParticipated = await participationRepository.participationCheck(
+    userId,
+    festivalId
+  );
+  if (!isParticipated) {
+    throw new Error("참여중인 축제가 아닙니다.");
+  }
+  const comment = await commentRepository.getById(commentId);
+  if (userId !== comment.userId && userRole !== "ADMIN") {
+    throw new Error("댓글 삭제 권한이 없습니다.");
+  }
+  return await commentRepository.deleteComment(commentId);
+};
+
+export default { createComment, getComments, updateComment, deleteComment };

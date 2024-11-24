@@ -13,6 +13,7 @@ router
 router
   .route("/:commentId/:festivalId")
   .all(passport.authenticate("access-token", { session: false }))
-  .patch(commentController.updateComment);
+  .patch(commentController.updateComment)
+  .delete(commentController.deleteComment);
 
 export default router;

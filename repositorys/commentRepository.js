@@ -69,4 +69,19 @@ const updateComment = (commentId, content) => {
     },
   });
 };
-export default { createComment, getComments, getById, updateComment };
+
+const deleteComment = (commentId) => {
+  return prisma.comment.delete({
+    where: {
+      id: commentId,
+    },
+  });
+};
+
+export default {
+  createComment,
+  getComments,
+  getById,
+  updateComment,
+  deleteComment,
+};

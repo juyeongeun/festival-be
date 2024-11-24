@@ -54,4 +54,20 @@ const updateComment = asyncHandle(async (req, res, next) => {
   }
 });
 
-export default { createComment, getComments, updateComment };
+const deleteComment = asyncHandle(async (req, res, next) => {
+  try {
+    const { commentId, festivalId } = req.params;
+    const { id: userId, role: userRole } = req.user;
+    await commentService.deleteComment(
+      parseInt(commentId),
+      parseInt(festivalId),
+      parseInt(userId),
+      userRole
+    );
+    return res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+});
+
+export default { createComment, getComments, updateComment, deleteComment };
