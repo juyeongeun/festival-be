@@ -36,7 +36,7 @@ const getNormalMe = async ({ userName, password }) => {
 };
 
 const createToken = (user, type) => {
-  const payload = { userId: user.id, email: user.email }; //jwt 토근 정도에 사용자의 id, email 정보를 담는다.
+  const payload = { userId: user.id, userName: user.userName }; //jwt 토근 정도에 사용자의 id, userName 정보를 담는다.
   const options = { expiresIn: type ? "1w" : "1h" }; //refresh 토큰의 경우 1주일, access 토근은 1시간의 유효성을 둔다
   return jwt.sign(payload, process.env.JWT_SECRET, options);
 };
