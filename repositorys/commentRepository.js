@@ -18,4 +18,28 @@ const createComment = (userId, boardId, content) => {
   });
 };
 
-export default { createComment };
+const getComments = (boardId, page, pageSize, orderBy) => {
+  const skip = (page - 1) * pageSize;
+  const where = {
+    boardId: boardId,
+  };
+  const validOrders = ["recent", "older"];
+  if (!validOrders.includes(orderBy)) {
+    orderBy = "recent";
+  }
+  return prisma.comment.findMany({
+    where,
+    skip,
+    take: pageSize,
+    orderBy: { createdAt: orderBy == "recent" ? "desc" : "asc" },
+    include: {
+      user: {
+        select: {
+          id: true,
+          userName: true,
+        },
+      },
+    },
+  });
+};
+export default { createComment, getComments };

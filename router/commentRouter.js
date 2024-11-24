@@ -7,6 +7,7 @@ const router = express.Router();
 router
   .route("/:boardId/:festivalId")
   .all(passport.authenticate("access-token", { session: false }))
-  .post(commentController.createComment);
+  .post(commentController.createComment)
+  .get(commentController.getComments);
 
 export default router;

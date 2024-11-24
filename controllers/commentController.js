@@ -18,4 +18,23 @@ const createComment = asyncHandle(async (req, res, next) => {
   }
 });
 
-export default { createComment };
+const getComments = asyncHandle(async (req, res, next) => {
+  try {
+    const { festivalId, boardId } = req.params;
+    const { id: userId } = req.user;
+    const { page = 1, pageSize = 5, orderBy = "recent" } = req.query;
+    const data = await commentService.getComments(
+      parseInt(festivalId),
+      parseInt(boardId),
+      parseInt(userId),
+      parseInt(page),
+      parseInt(pageSize),
+      orderBy
+    );
+    return res.status(200).send(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+export default { createComment, getComments };
