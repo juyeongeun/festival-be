@@ -1,4 +1,4 @@
-import festivalService from "../services/festivalServices.js";
+import festivalService from "../services/festivalService.js";
 import asyncHandle from "../middleware/error/asyncHandler.js";
 const patchFestivalController = asyncHandle(async (req, res, next) => {
   try {

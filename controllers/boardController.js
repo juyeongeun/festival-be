@@ -1,5 +1,5 @@
 import asyncHandle from "../middleware/error/asyncHandler.js";
-import boardService from "../services/boardServices.js";
+import boardService from "../services/boardService.js";
 // 컨트롤러 파람스
 // 서비스 유효성
 // 레포지토리 디비

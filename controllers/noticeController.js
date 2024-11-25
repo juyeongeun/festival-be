@@ -1,5 +1,5 @@
 import asyncHandle from "../middleware/error/asyncHandler.js";
-import noticeService from "../services/noticeServices.js";
+import noticeService from "../services/noticeService.js";
 
 const deleteNoticeController = asyncHandle(async (req, res, next) => {
   try {

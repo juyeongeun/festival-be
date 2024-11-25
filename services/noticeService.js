@@ -1,4 +1,4 @@
-import * as noticeRepository from "../repositorys/noticeRepositorys.js";
+import * as noticeRepository from "../repositorys/noticeRepository.js";
 import participationRepository from "../repositorys/participationRepository.js";
 
 const deleteNotice = async (userId, festivalId, noticeId, userRole) => {
