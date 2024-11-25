@@ -188,37 +188,31 @@ const participation = [
 
 const notification = [
   {
-    participationId: 1,
     userId: 1,
     content: "Hello",
     read: true,
   },
   {
-    participationId: 2,
     userId: 2,
     content: "World",
     read: false,
   },
   {
-    participationId: 3,
     userId: 3,
     content: "Festival is coming!",
     read: false,
   },
   {
-    participationId: 4,
     userId: 1,
     content: "Festival is over!",
     read: false,
   },
   {
-    participationId: 5,
     userId: 2,
     content: "Festival is going on!",
     read: true,
   },
   {
-    participationId: 6,
     userId: 3,
     content: "Festival is going on!",
     read: true,

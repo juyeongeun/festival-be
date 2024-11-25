@@ -12,4 +12,4 @@ const festivalImagePatch = async (festivalId, mapImage) => {
   return data;
 };
 
-export { festivalImagePatch };
+export default { festivalImagePatch };

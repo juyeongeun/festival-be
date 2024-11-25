@@ -44,4 +44,4 @@ const createNotice = (userId, festivalId, content) => {
   });
   return data;
 };
-export { getNotice, createNotice, patchNotice, deleteNotice };
+export default { getNotice, createNotice, patchNotice, deleteNotice };

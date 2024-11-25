@@ -1,29 +1,18 @@
-import * as noticeRepository from "../repositorys/noticeRepository.js";
-import participationRepository from "../repositorys/participationRepository.js";
+import noticeRepository from "../repositorys/noticeRepository.js";
+import checkUser from "../utils/checkUser.js";
 import notificationRepository from "../repositorys/notificationRepository.js";
+
 const deleteNotice = async (userId, festivalId, noticeId, userRole) => {
   if (userRole !== "ADMIN") {
     throw new Error("관리자가 아닙니다.");
   }
-  const festivalUser = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
-  if (!festivalUser) {
-    throw new Error("참여자가 아닙니다.");
-  }
+  await checkUser(userId, festivalId);
   const data = await noticeRepository.deleteNotice(noticeId);
   return data;
 };
-const getNotice = async (userId, festivalId, page, pageSize, orderBy) => {
-  const festivalUser = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
 
-  if (!festivalUser) {
-    throw new Error("참여자가 아닙니다.");
-  }
+const getNotice = async (userId, festivalId, page, pageSize, orderBy) => {
+  await checkUser(userId, festivalId);
   const data = await noticeRepository.getNotice(
     festivalId,
     page,
@@ -37,13 +26,7 @@ const patchNotice = async (userId, festivalId, noticeId, userRole, content) => {
   if (userRole !== "ADMIN") {
     throw new Error("관리자가 아닙니다.");
   }
-  const festivalUser = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
-  if (!festivalUser) {
-    throw new Error("참여자가 아닙니다.");
-  }
+  await checkUser(userId, festivalId);
   const data = await noticeRepository.patchNotice(userId, noticeId, content);
   return data;
 };
@@ -52,14 +35,7 @@ const createNotice = async (userId, festivalId, userRole, content) => {
   if (userRole !== "ADMIN") {
     throw new Error("관리자가 아닙니다.");
   }
-  const festivalUser = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
-
-  if (!festivalUser) {
-    throw new Error("참여자가 아닙니다.");
-  }
+  await checkUser(userId, festivalId);
 
   const data = await noticeRepository.createNotice(userId, festivalId, content);
 
