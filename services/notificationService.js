@@ -26,49 +26,6 @@ const patchNotification = async (userId, notificationId) => {
   }
   return data;
 };
-// const createNoticeNotification = async (userRole, festivalId, content) => {
-//   if (userRole !== "ADMIN") {
-//     throw new Error("관리자가 아닙니다.");
-//   }
-//   const userList = await participationRepository.participationManyCheck(
-//     festivalId
-//   );
-
-//   const data = await Promise.all(
-//     userList.map(async (user) => {
-//       await notificationRepository.createNoticeNotification(
-//         user.userId,
-//         content
-//       );
-//     })
-//   );
-//   return data;
-// };
-
-// const createCommentNotification = async (
-//   userId,
-//   festivalId,
-//   boardId,
-//   nickname
-// ) => {
-//   const userCheck = await participationRepository.participationCheck(
-//     userId,
-//     festivalId
-//   );
-//   if (!userCheck) {
-//     throw new Error("참여자가 아닙니다.");
-//   }
-//   const board = await boardRepository.getIdBoard(boardId);
-//   if (!board) {
-//     throw new Error("게시글 없습니다.");
-//   }
-
-//   const data = await notificationRepository.createCommentNotification(
-//     board,
-//     nickname
-//   );
-//   return data;
-// };
 
 export default {
   patchNotification,
