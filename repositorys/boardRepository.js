@@ -5,7 +5,6 @@ const adminGetBoard = (
   page,
   pageSize,
   orderBy,
-  order,
   keyword,
   boardType
 ) => {
@@ -20,7 +19,7 @@ const adminGetBoard = (
     skip: (page - 1) * pageSize,
     take: pageSize,
     orderBy: {
-      [orderBy]: order,
+      createdAt: orderBy === "recent" ? "desc" : "asc",
     },
   });
   return data;
@@ -57,7 +56,7 @@ const getIdBoard = (boardId) => {
   return data;
 };
 
-const getLossBoard = (festivalId, page, pageSize, orderBy, order) => {
+const getLossBoard = (festivalId, page, pageSize, orderBy) => {
   const data = prisma.board.findMany({
     where: {
       festivalId: festivalId,
@@ -66,12 +65,12 @@ const getLossBoard = (festivalId, page, pageSize, orderBy, order) => {
     skip: (page - 1) * pageSize,
     take: pageSize,
     orderBy: {
-      [orderBy]: order,
+      createdAt: orderBy === "recent" ? "desc" : "asc",
     },
   });
   return data;
 };
-const getBoard = (festivalId, page, pageSize, orderBy, order) => {
+const getBoard = (festivalId, page, pageSize, orderBy) => {
   const data = prisma.board.findMany({
     where: {
       festivalId: festivalId,
@@ -80,7 +79,7 @@ const getBoard = (festivalId, page, pageSize, orderBy, order) => {
     skip: (page - 1) * pageSize,
     take: pageSize,
     orderBy: {
-      [orderBy]: order,
+      createdAt: orderBy === "recent" ? "desc" : "asc",
     },
   });
   return data;

@@ -10,6 +10,7 @@ import boothRouter from "./router/boothRouter.js";
 import noticeRouter from "./router/noticeRouter.js";
 import commentRouter from "./router/commentRouter.js";
 import notificationRouter from "./router/notificationRouter.js";
+import reviewRouter from "./router/reviewRouter.js";
 
 dotenv.config();
 const app = express();
@@ -24,6 +25,7 @@ app.use("/booth", boothRouter);
 app.use("/notice", noticeRouter);
 app.use("/comment", commentRouter);
 app.use("/notification", notificationRouter);
+app.use("/review", reviewRouter);
 
 app.use(errorHandler);
 
