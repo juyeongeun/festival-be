@@ -1,5 +1,5 @@
-import * as boardRepository from "../repositorys/boardRepository.js";
-import * as participationRepository from "../repositorys/participationRepository.js";
+import boardRepository from "../repositorys/boardRepository.js";
+import participationRepository from "../repositorys/participationRepository.js";
 const deleteBoard = async (userId, festivalId, boardId) => {
   const festivalUser = await participationRepository.participationCheck(
     userId,

@@ -117,7 +117,7 @@ const createBoard = (
   return data;
 };
 
-export {
+export default {
   createBoard,
   getBoard,
   getIdBoard,

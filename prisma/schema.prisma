@@ -95,18 +95,15 @@ model Participation {
   updatedAt    DateTime       @updatedAt
   festival     Festival       @relation(fields: [festivalId], references: [id])
   user         User           @relation(fields: [userId], references: [id])
-  notification Notification[]
 }
 
 model Notification {
   id              Int           @id @default(autoincrement())
-  participationId Int // 해당 축제 참여중인 유저
   userId          Int
   content         String
   read            Boolean       @default(false)
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
-  participation   Participation @relation(fields: [participationId], references: [id])
   user            User          @relation(fields: [userId], references: [id])
 }
 

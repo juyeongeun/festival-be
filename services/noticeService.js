@@ -1,6 +1,6 @@
 import * as noticeRepository from "../repositorys/noticeRepository.js";
 import participationRepository from "../repositorys/participationRepository.js";
-
+import notificationRepository from "../repositorys/notificationRepository.js";
 const deleteNotice = async (userId, festivalId, noticeId, userRole) => {
   if (userRole !== "ADMIN") {
     throw new Error("관리자가 아닙니다.");
@@ -70,6 +70,19 @@ const createNotice = async (userId, festivalId, userRole, content) => {
   }
 
   const data = await noticeRepository.createNotice(userId, festivalId, content);
+
+  const userList = await participationRepository.participationManyCheck(
+    festivalId
+  );
+
+  await Promise.all(
+    userList.map(async (user) => {
+      await notificationRepository.createNoticeNotification(
+        user.userId,
+        content
+      );
+    })
+  );
   return data;
 };
 

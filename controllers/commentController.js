@@ -3,14 +3,15 @@ import asyncHandle from "../middleware/error/asyncHandler.js";
 
 const createComment = asyncHandle(async (req, res, next) => {
   try {
-    const { id: userId } = req.user;
+    const { id: userId, nickname } = req.user;
     const { boardId, festivalId } = req.params;
     const { content } = req.body;
     const data = await commentService.createComment(
       parseInt(userId),
       parseInt(festivalId),
       parseInt(boardId),
-      content
+      content,
+      nickname
     );
     return res.status(201).send(data);
   } catch (error) {
