@@ -1,5 +1,5 @@
 import boothRepository from "../repositorys/boothRepository.js";
-import participationRepository from "../repositorys/participationRepository.js";
+import checkUser from "../utils/checkUser.js";
 
 const createBooth = async (userId, festivalId, data) => {
   const booth = await boothRepository.createBooth(userId, festivalId, data);
@@ -20,13 +20,8 @@ const getBoothAdmin = async (
     throw new Error("ADMIN 권한만 조회할 수 있습니다.");
   }
 
-  const isParticipated = await participationRepository.participationCheck(
-    adminId,
-    festivalId
-  );
-  if (!isParticipated) {
-    throw new Error("참여중인 축제가 아닙니다.");
-  }
+  await checkUser(adminId, festivalId);
+
   return await boothRepository.getBoothAdmin(
     festivalId,
     page,
@@ -46,14 +41,7 @@ const getBooths = async (
   keyword,
   type
 ) => {
-  const isParticipated = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
-  if (!isParticipated) {
-    throw new Error("참여중인 축제가 아닙니다.");
-  }
-
+  await checkUser(userId, festivalId);
   return await boothRepository.getBooths(
     festivalId,
     page,
@@ -65,13 +53,7 @@ const getBooths = async (
 };
 
 const getBooth = async (boothId, userId, festivalId) => {
-  const isParticipated = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
-  if (!isParticipated) {
-    throw new Error("참여중인 축제가 아닙니다.");
-  }
+  await checkUser(userId, festivalId);
   return await boothRepository.getBooth(boothId);
 };
 
@@ -85,39 +67,18 @@ const updateBooth = async (festivalId, boothId, userId, userRole, data) => {
       throw new Error("본인의 부스만 수정할 수 있습니다.");
     }
   }
-
-  const isParticipated = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
-  if (!isParticipated) {
-    throw new Error("참여중인 축제가 아닙니다.");
-  }
+  await checkUser(userId, festivalId);
 
   return await boothRepository.updateBooth(boothId, data);
 };
 
 const getMyBooths = async (userId, festivalId) => {
-  const isParticipated = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
-  if (!isParticipated) {
-    throw new Error("참여중인 축제가 아닙니다.");
-  }
+  await checkUser(userId, festivalId);
   return await boothRepository.getMyBooths(userId, festivalId);
 };
 
 const deleteBooth = async (boothId, userId, festivalId, userRole) => {
-  const isParticipated = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
-
-  if (!isParticipated) {
-    throw new Error("참여중인 축제가 아닙니다.");
-  }
-
+  await checkUser(userId, festivalId);
   const booth = await boothRepository.getBooth(parseInt(boothId));
   if (booth.userId !== userId && userRole !== "ADMIN") {
     throw new Error("삭제 권한이 없습니다.");

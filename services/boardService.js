@@ -1,13 +1,8 @@
-import * as boardRepository from "../repositorys/boardRepository.js";
-import * as participationRepository from "../repositorys/participationRepository.js";
+import boardRepository from "../repositorys/boardRepository.js";
+import checkUser from "../utils/checkUser.js";
+
 const deleteBoard = async (userId, festivalId, boardId) => {
-  const festivalUser = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
-  if (!festivalUser) {
-    throw new Error("참여자가 아닙니다.");
-  }
+  await checkUser(userId, festivalId);
   const board = await boardRepository.getIdBoard(boardId);
   if (board.userId !== userId) {
     throw new Error("게시글의 작성자가 아닙니다.");
@@ -26,14 +21,7 @@ const patchBoard = async (
   boardType,
   lossType
 ) => {
-  const festivalUser = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
-  if (!festivalUser) {
-    throw new Error("참여자가 아닙니다.");
-  }
-
+  await checkUser(userId, festivalId);
   const board = await boardRepository.getIdBoard(boardId);
   if (board.userId !== userId) {
     throw new Error("게시글의 작성자가 아닙니다.");
@@ -50,13 +38,7 @@ const patchBoard = async (
   return data;
 };
 const getIdBoard = async (festivalId, userId, boardId) => {
-  const festivalUser = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
-  if (!festivalUser) {
-    throw new Error("참여자가 아닙니다.");
-  }
+  await checkUser(userId, festivalId);
   const data = await boardRepository.getIdBoard(boardId);
   return data;
 };
@@ -76,13 +58,7 @@ const adminGetBoard = async (
     throw new Error("관리자가 아닙니다.");
   }
 
-  const festivalUser = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
-  if (!festivalUser) {
-    throw new Error("참여자가 아닙니다.");
-  }
+  await checkUser(userId, festivalId);
 
   const data = await boardRepository.adminGetBoard(
     festivalId,
@@ -103,13 +79,7 @@ const getLossBoard = async (
   orderBy,
   order
 ) => {
-  const festivalUser = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
-  if (!festivalUser) {
-    throw new Error("참여자가 아닙니다.");
-  }
+  await checkUser(userId, festivalId);
   const data = await boardRepository.getLossBoard(
     festivalId,
     page,
@@ -120,13 +90,7 @@ const getLossBoard = async (
   return data;
 };
 const getBoard = async (festivalId, userId, page, pageSize, orderBy, order) => {
-  const festivalUser = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
-  if (!festivalUser) {
-    throw new Error("참여자가 아닙니다.");
-  }
+  await checkUser(userId, festivalId);
   const data = await boardRepository.getBoard(
     festivalId,
     page,
@@ -145,13 +109,7 @@ const createBoard = async (
   boardType,
   lossType
 ) => {
-  const festivalUser = await participationRepository.participationCheck(
-    userId,
-    festivalId
-  );
-  if (!festivalUser) {
-    throw new Error("참여자가 아닙니다.");
-  }
+  await checkUser(userId, festivalId);
   const data = await boardRepository.createBoard(
     userId,
     festivalId,
