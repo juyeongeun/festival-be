@@ -140,7 +140,7 @@ const updateBooth = (boothId, data) => {
 };
 
 const getMyBooths = (userId, festivalId) => {
-  return prisma.booth.findMany({
+  return prisma.booth.findFirst({
     where: {
       userId: userId,
       festivalId: festivalId,
