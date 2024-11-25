@@ -1,19 +1,17 @@
 import express from "express";
+import reviewController from "../controllers/reviewController.js";
 import passport from "../config/passportConfig.js";
-import noticeController from "../controllers/noticeController.js";
 
 const router = express.Router();
 
 router
-  .route("/:festivalId")
+  .route("/:boothId")
   .all(passport.authenticate("access-token", { session: false }))
-  .get(noticeController.getNotice)
-  .post(noticeController.createNotice);
-
+  .post(reviewController.createReview)
+  .get(reviewController.getReview);
 router
-  .route("/:noticeId/:festivalId")
+  .route("/:reviewId")
   .all(passport.authenticate("access-token", { session: false }))
-  .patch(noticeController.patchNotice)
-  .delete(noticeController.deleteNotice);
+  .delete(reviewController.deleteReview);
 
 export default router;

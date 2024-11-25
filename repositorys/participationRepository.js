@@ -27,4 +27,20 @@ const participationCheck = (userId, festivalId) => {
   return data;
 };
 
-export default { createParticipation, participationCheck };
+const participationManyCheck = (festivalId) => {
+  const data = prisma.participation.findMany({
+    where: {
+      festivalId: festivalId,
+    },
+    select: {
+      userId: true,
+    },
+  });
+  return data;
+};
+
+export default {
+  createParticipation,
+  participationCheck,
+  participationManyCheck,
+};

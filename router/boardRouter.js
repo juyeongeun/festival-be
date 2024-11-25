@@ -1,5 +1,5 @@
 import express from "express";
-import boardController from "../controllers/boardControllers.js";
+import boardController from "../controllers/boardController.js";
 import passport from "../config/passportConfig.js";
 
 const router = express.Router();
