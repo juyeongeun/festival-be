@@ -49,7 +49,6 @@ const adminGetBoard = async (
   page,
   pageSize,
   orderBy,
-  order,
   keyword,
   boardType,
   userRole
@@ -65,41 +64,34 @@ const adminGetBoard = async (
     page,
     pageSize,
     orderBy,
-    order,
     keyword,
     boardType
   );
   return data;
 };
-const getLossBoard = async (
-  festivalId,
-  userId,
-  page,
-  pageSize,
-  orderBy,
-  order
-) => {
+
+const getLossBoard = async (festivalId, userId, page, pageSize, orderBy) => {
   await checkUser(userId, festivalId);
   const data = await boardRepository.getLossBoard(
     festivalId,
     page,
     pageSize,
-    orderBy,
-    order
+    orderBy
   );
   return data;
 };
-const getBoard = async (festivalId, userId, page, pageSize, orderBy, order) => {
+
+const getBoard = async (festivalId, userId, page, pageSize, orderBy) => {
   await checkUser(userId, festivalId);
   const data = await boardRepository.getBoard(
     festivalId,
     page,
     pageSize,
-    orderBy,
-    order
+    orderBy
   );
   return data;
 };
+
 const createBoard = async (
   userId,
   festivalId,

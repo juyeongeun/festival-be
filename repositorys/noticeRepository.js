@@ -20,13 +20,13 @@ const patchNotice = (userId, noticeId, content) => {
   });
   return data;
 };
-const getNotice = (festivalId, page, pageSize, orderBy, order) => {
+const getNotice = (festivalId, page, pageSize, orderBy) => {
   const data = prisma.notice.findMany({
     where: {
       festivalId: festivalId,
     },
     orderBy: {
-      [orderBy]: order,
+      createdAt: orderBy === "recent" ? "desc" : "asc",
     },
     skip: (page - 1) * pageSize,
     take: pageSize,

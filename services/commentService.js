@@ -1,13 +1,26 @@
 import commentRepository from "../repositorys/commentRepository.js";
 import checkUser from "../utils/checkUser.js";
+import notificationRepository from "../repositorys/notificationRepository.js";
+import boardRepository from "../repositorys/boardRepository.js";
 
-const createComment = async (userId, festivalId, boardId, content) => {
-  await checkUser(userId, festivalId);
+const createComment = async (
+  userId,
+  festivalId,
+  boardId,
+  content,
+  nickname
+) => {
+   await checkUser(userId, festivalId);
   const comment = await commentRepository.createComment(
     userId,
     boardId,
     content
   );
+  const board = await boardRepository.getIdBoard(boardId);
+  if (board.userId !== userId) {
+    await notificationRepository.createCommentNotification(board, nickname);
+  }
+
   return comment;
 };
 

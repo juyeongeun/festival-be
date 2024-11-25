@@ -8,16 +8,21 @@ const adminGetBoardController = asyncHandle(async (req, res, next) => {
   try {
     const { id: userId, role: userRole } = req.user;
     const { festivalId } = req.params;
-    const { page, pageSize, orderBy, order, keyword, boardType } = req.query;
+    const {
+      page = 1,
+      pageSize = 5,
+      orderBy = "recent",
+      keyword = "",
+      boardType = "",
+    } = req.query;
     const data = await boardService.adminGetBoard(
       parseInt(festivalId),
       parseInt(userId),
       parseInt(page) || 1,
       parseInt(pageSize) || 4,
-      orderBy || "createdAt",
-      order || "asc",
-      keyword || undefined,
-      boardType || undefined,
+      orderBy,
+      keyword,
+      boardType,
       userRole
     );
     res.status(200).send(data);
@@ -81,14 +86,13 @@ const getLossBoardController = asyncHandle(async (req, res, next) => {
   try {
     const { id: userId } = req.user;
     const { festivalId } = req.params;
-    const { page, pageSize, orderBy, order } = req.query;
+    const { page = 1, pageSize = 5, orderBy = "recent" } = req.query;
     const data = await boardService.getLossBoard(
       parseInt(festivalId),
       parseInt(userId),
-      parseInt(page) || 1,
-      parseInt(pageSize) || 4,
-      orderBy || "createdAt",
-      order || "asc"
+      page,
+      pageSize,
+      orderBy
     );
     res.status(200).send(data);
   } catch (error) {
@@ -100,14 +104,13 @@ const getBoardController = asyncHandle(async (req, res, next) => {
   try {
     const { id: userId } = req.user;
     const { festivalId } = req.params;
-    const { page, pageSize, orderBy, order } = req.query;
+    const { page = 1, pageSize = 5, orderBy = "recent" } = req.query;
     const data = await boardService.getBoard(
       parseInt(festivalId),
       parseInt(userId),
-      parseInt(page) || 1,
-      parseInt(pageSize) || 4,
-      orderBy || "createdAt",
-      order || "asc"
+      page,
+      pageSize,
+      orderBy
     );
     res.status(200).send(data);
   } catch (error) {

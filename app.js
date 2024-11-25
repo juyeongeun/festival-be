@@ -11,6 +11,9 @@ import noticeRouter from "./router/noticeRouter.js";
 import commentRouter from "./router/commentRouter.js";
 import wishlistRouter from "./router/wishlistRouter.js";
 // import payRouter from "./router/payRouter.js";
+import notificationRouter from "./router/notificationRouter.js";
+import reviewRouter from "./router/reviewRouter.js";
+import menuRouter from "./router/menuRouter.js";
 
 dotenv.config();
 const app = express();
@@ -26,6 +29,9 @@ app.use("/notice", noticeRouter);
 app.use("/comment", commentRouter);
 app.use("/wishlist", wishlistRouter);
 // app.use("/pay", payRouter);
+app.use("/notification", notificationRouter);
+app.use("/review", reviewRouter);
+app.use("/menu", menuRouter);
 
 app.use(errorHandler);
 
