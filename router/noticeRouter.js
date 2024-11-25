@@ -1,6 +1,6 @@
 import express from "express";
 import passport from "../config/passportConfig.js";
-import noticeController from "../controllers/noticeControllers.js";
+import noticeController from "../controllers/noticeController.js";
 
 const router = express.Router();
 

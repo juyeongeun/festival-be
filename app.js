@@ -9,6 +9,7 @@ import boardRouter from "./router/boardRouter.js";
 import boothRouter from "./router/boothRouter.js";
 import noticeRouter from "./router/noticeRouter.js";
 import commentRouter from "./router/commentRouter.js";
+import wishlistRouter from "./router/wishlistRouter.js";
 
 dotenv.config();
 const app = express();
@@ -22,6 +23,7 @@ app.use("/board", boardRouter);
 app.use("/booth", boothRouter);
 app.use("/notice", noticeRouter);
 app.use("/comment", commentRouter);
+app.use("/wishlist", wishlistRouter);
 
 app.use(errorHandler);
 
