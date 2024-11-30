@@ -15,4 +15,6 @@ const patchFestivalController = asyncHandle(async (req, res, next) => {
   }
 });
 
+
+
 export default { patchFestival: patchFestivalController };
