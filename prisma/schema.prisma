@@ -78,7 +78,7 @@ model User {
 
 model Festival {
   id            Int             @id @default(autoincrement())
-  festivalCode  Int
+  festivalCode  Int             @unique
   mapImage      String?
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
