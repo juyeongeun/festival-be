@@ -1,0 +1,27 @@
+name: Update Festival Data
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # 매일 00시에 실행
+
+jobs:
+  update-festival:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16 # Node.js 버전 설정
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run festival update script
+        run: node /scheduler/festivalCreate.js
+        env:
+          DATA_SERVICE_URL: ${{ secrets.DATA_SERVICE_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
