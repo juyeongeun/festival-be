@@ -10,7 +10,7 @@ const createComment = async (
   content,
   nickname
 ) => {
-   await checkUser(userId, festivalId);
+  await checkUser(userId, festivalId);
   const comment = await commentRepository.createComment(
     userId,
     boardId,
