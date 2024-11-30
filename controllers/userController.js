@@ -1,16 +1,120 @@
 import userService from "../services/userService.js";
 import asyncHandle from "../middleware/error/asyncHandler.js";
 import cookiesConfig from "../config/cookieConfig.js";
+import axios from "axios";
 
+// const create = asyncHandle(async (req, res, next) => {
+//   try {
+//     const { userName, nickname, provider, providerId } = req.body;
 
-const create = asyncHandle(async (req, res, next) => {
+//     // 소셜 사용자 확인
+//     const user = await userService.getProviderMe({ provider, providerId });
+//     if (user) {
+//       // 로그인
+//       const accessToken = userService.createToken(user);
+//       const refreshToken = userService.createToken(user, "refresh");
+//       const nextUser = await userService.updateUser(user.id, {
+//         refreshToken,
+//       });
+
+//       res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
+//       res.cookie(
+//         "refresh-token",
+//         refreshToken,
+//         cookiesConfig.refreshTokenOption
+//       );
+
+//       res.status(200).send(nextUser);
+//     } else {
+//       // 회원가입
+//       const refreshToken = userService.createToken({}, "refresh");
+//       const newUser = await userService.createProviderUser({
+//         userName,
+//         nickname,
+//         provider,
+//         providerId,
+//         refreshToken,
+//       });
+//       const accessToken = userService.createToken(newUser);
+
+//       res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
+//       res.cookie(
+//         "refresh-token",
+//         refreshToken,
+//         cookiesConfig.refreshTokenOption
+//       );
+
+//       res.status(201).send(newUser);
+//     }
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
+const getKakaoAuthUrl = asyncHandle(async (req, res, next) => {
   try {
-    const { userName, nickname, provider, providerId } = req.body;
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
+    res.status(200).send({ kakaoAuthUrl });
+  } catch (error) {
+    next(error);
+  }
+});
 
-    // 소셜 사용자 확인
-    const user = await userService.getProviderMe({ provider, providerId });
-    if (user) {
-      // 로그인
+const kakaoCallback = asyncHandle(async (req, res, next) => {
+  const { code } = req.query;
+  try {
+    const tokenResponse = await axios
+      .post("https://kauth.kakao.com/oauth/token", null, {
+        params: {
+          grant_type: "authorization_code",
+          client_id: process.env.KAKAO_CLIENT_ID,
+          redirect_uri: process.env.KAKAO_REDIRECT_URI,
+          code,
+        },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      })
+      .catch((error) => {
+        console.error("토큰 요청 에러:", error.response.data);
+        throw error;
+      });
+    const { access_token } = tokenResponse.data;
+
+    const userInfoResponse = await axios.get(
+      "https://kapi.kakao.com/v2/user/me",
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    const kakaoUser = userInfoResponse.data;
+
+    const user = await userService.getProviderMe({
+      provider: "KAKAO",
+      providerId: kakaoUser.id.toString(),
+    });
+    if (!user) {
+      const newUser = await userService.createProviderUser({
+        provider: "KAKAO",
+        providerId: kakaoUser.id.toString(),
+        userName: kakaoUser.kakao_account.profile.nickname,
+        nickname: kakaoUser.kakao_account.profile.nickname,
+      });
+      const accessToken = userService.createToken(newUser);
+      const refreshToken = userService.createToken(newUser, "refresh");
+
+      res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
+      res.cookie(
+        "refresh-token",
+        refreshToken,
+        cookiesConfig.refreshTokenOption
+      );
+
+      res.status(200).send(newUser);
+    } else {
       const accessToken = userService.createToken(user);
       const refreshToken = userService.createToken(user, "refresh");
       const nextUser = await userService.updateUser(user.id, {
@@ -25,26 +129,6 @@ const create = asyncHandle(async (req, res, next) => {
       );
 
       res.status(200).send(nextUser);
-    } else {
-      // 회원가입
-      const refreshToken = userService.createToken({}, "refresh");
-      const newUser = await userService.createProviderUser({
-        userName,
-        nickname,
-        provider,
-        providerId,
-        refreshToken,
-      });
-      const accessToken = userService.createToken(newUser);
-
-      res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
-      res.cookie(
-        "refresh-token",
-        refreshToken,
-        cookiesConfig.refreshTokenOption
-      );
-
-      res.status(201).send(newUser);
     }
   } catch (error) {
     next(error);
@@ -208,7 +292,7 @@ const deleteMe = asyncHandle(async (req, res, next) => {
 });
 
 export default {
-  create,
+  // create,
   logout,
   changePassword,
   changeType,
@@ -217,4 +301,6 @@ export default {
   deleteMe,
   loginAdmin,
   signupAdmin,
+  getKakaoAuthUrl,
+  kakaoCallback,
 };
