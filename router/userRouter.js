@@ -4,7 +4,9 @@ import passport from "../config/passportConfig.js";
 
 const router = express.Router();
 
-router.post("/", userController.create);
+// router.post("/", userController.create);
+router.get("/auth/kakao/url", userController.getKakaoAuthUrl);
+router.get("/auth/kakao/callback", userController.kakaoCallback);
 router.post("/admin", userController.loginAdmin);
 router.post("/admin/join", userController.signupAdmin);
 router.post(
