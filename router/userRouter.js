@@ -7,6 +7,8 @@ const router = express.Router();
 // router.post("/", userController.create);
 router.get("/auth/kakao/url", userController.getKakaoAuthUrl);
 router.get("/auth/kakao/callback", userController.kakaoCallback);
+router.get("/auth/google/url", userController.getGoogleAuthUrl);
+router.get("/auth/google/callback", userController.googleCallback);
 router.post("/admin", userController.loginAdmin);
 router.post("/admin/join", userController.signupAdmin);
 router.post(
