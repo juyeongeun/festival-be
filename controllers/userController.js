@@ -3,54 +3,6 @@ import asyncHandle from "../middleware/error/asyncHandler.js";
 import cookiesConfig from "../config/cookieConfig.js";
 import axios from "axios";
 
-// const create = asyncHandle(async (req, res, next) => {
-//   try {
-//     const { userName, nickname, provider, providerId } = req.body;
-
-//     // 소셜 사용자 확인
-//     const user = await userService.getProviderMe({ provider, providerId });
-//     if (user) {
-//       // 로그인
-//       const accessToken = userService.createToken(user);
-//       const refreshToken = userService.createToken(user, "refresh");
-//       const nextUser = await userService.updateUser(user.id, {
-//         refreshToken,
-//       });
-
-//       res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
-//       res.cookie(
-//         "refresh-token",
-//         refreshToken,
-//         cookiesConfig.refreshTokenOption
-//       );
-
-//       res.status(200).send(nextUser);
-//     } else {
-//       // 회원가입
-//       const refreshToken = userService.createToken({}, "refresh");
-//       const newUser = await userService.createProviderUser({
-//         userName,
-//         nickname,
-//         provider,
-//         providerId,
-//         refreshToken,
-//       });
-//       const accessToken = userService.createToken(newUser);
-
-//       res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
-//       res.cookie(
-//         "refresh-token",
-//         refreshToken,
-//         cookiesConfig.refreshTokenOption
-//       );
-
-//       res.status(201).send(newUser);
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
 const getKakaoAuthUrl = asyncHandle(async (req, res, next) => {
   try {
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
@@ -64,7 +16,7 @@ const kakaoCallback = asyncHandle(async (req, res, next) => {
   const { code } = req.query;
   try {
     const tokenResponse = await axios
-      .post("https://kauth.kakao.com/oauth/token", null, {
+      .post(process.env.KAKAO_TOKEN_URI, null, {
         params: {
           grant_type: "authorization_code",
           client_id: process.env.KAKAO_CLIENT_ID,
@@ -81,56 +33,103 @@ const kakaoCallback = asyncHandle(async (req, res, next) => {
       });
     const { access_token } = tokenResponse.data;
 
-    const userInfoResponse = await axios.get(
-      "https://kapi.kakao.com/v2/user/me",
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      }
-    );
+    const userInfoResponse = await axios.get(process.env.KAKAO_USER_INFO_URI, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
 
     const kakaoUser = userInfoResponse.data;
 
-    const user = await userService.getProviderMe({
+    let user = await userService.getProviderMe({
       provider: "KAKAO",
       providerId: kakaoUser.id.toString(),
     });
     if (!user) {
-      const newUser = await userService.createProviderUser({
+      user = await userService.createProviderUser({
         provider: "KAKAO",
         providerId: kakaoUser.id.toString(),
         userName: kakaoUser.kakao_account.profile.nickname,
         nickname: kakaoUser.kakao_account.profile.nickname,
       });
-      const accessToken = userService.createToken(newUser);
-      const refreshToken = userService.createToken(newUser, "refresh");
-
-      res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
-      res.cookie(
-        "refresh-token",
-        refreshToken,
-        cookiesConfig.refreshTokenOption
-      );
-
-      res.status(200).send(newUser);
-    } else {
-      const accessToken = userService.createToken(user);
-      const refreshToken = userService.createToken(user, "refresh");
-      const nextUser = await userService.updateUser(user.id, {
-        refreshToken,
-      });
-
-      res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
-      res.cookie(
-        "refresh-token",
-        refreshToken,
-        cookiesConfig.refreshTokenOption
-      );
-
-      res.status(200).send(nextUser);
     }
+
+    const accessToken = userService.createToken(user);
+    const refreshToken = userService.createToken(user, "refresh");
+    const nextUser = await userService.updateUser(user.id, {
+      refreshToken,
+    });
+
+    res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
+    res.cookie("refresh-token", refreshToken, cookiesConfig.refreshTokenOption);
+
+    res.status(200).send({ message: "로그인 성공", user: nextUser });
+    // res.redirect(`http://localhost:3000/success`);
   } catch (error) {
+    next(error);
+  }
+});
+
+const getGoogleAuthUrl = asyncHandle(async (req, res) => {
+  const scope = encodeURIComponent("email profile");
+
+  const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${process.env.GOOGLE_REDIRECT_URI}&response_type=code&scope=${scope}&access_type=offline`;
+
+  res.status(200).send({ googleAuthUrl: url });
+});
+
+const googleCallback = asyncHandle(async (req, res, next) => {
+  const { code } = req.query;
+
+  try {
+    // 1. 액세스 토큰 받기
+    const tokenResponse = await axios.post(process.env.GOOGLE_TOKEN_URI, {
+      code,
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET,
+      redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+      grant_type: "authorization_code",
+    });
+
+    const { access_token } = tokenResponse.data;
+
+    // 2. 사용자 정보 받기
+    const userInfoResponse = await axios.get(process.env.GOOGLE_USER_INFO_URI, {
+      headers: { Authorization: `Bearer ${access_token}` },
+    });
+
+    const googleUser = userInfoResponse.data;
+
+    // 3. 사용자 조회 또는 생성
+    let user = await userService.getProviderMe({
+      provider: "GOOGLE",
+      providerId: googleUser.id,
+    });
+
+    if (!user) {
+      // 신규 사용자 생성
+      user = await userService.createProviderUser({
+        provider: "GOOGLE",
+        providerId: googleUser.id,
+        userName: googleUser.email,
+        nickname: googleUser.name,
+      });
+    }
+
+    // 4. JWT 토큰 생성 및 쿠키 설정
+    const accessToken = userService.createToken(user);
+    const refreshToken = userService.createToken(user, "refresh");
+
+    await userService.updateUser(user.id, { refreshToken });
+
+    res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
+    res.cookie("refresh-token", refreshToken, cookiesConfig.refreshTokenOption);
+
+    // 5. 프론트엔드로 리다이렉트
+    // res.redirect(`${process.env.FRONTEND_URL}/login/success`);
+    res.status(200).send({ message: "로그인 성공", user });
+  } catch (error) {
+    console.error("구글 로그인 에러:", error);
     next(error);
   }
 });
@@ -292,7 +291,6 @@ const deleteMe = asyncHandle(async (req, res, next) => {
 });
 
 export default {
-  // create,
   logout,
   changePassword,
   changeType,
@@ -303,4 +301,6 @@ export default {
   signupAdmin,
   getKakaoAuthUrl,
   kakaoCallback,
+  getGoogleAuthUrl,
+  googleCallback,
 };
