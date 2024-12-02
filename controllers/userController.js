@@ -3,6 +3,71 @@ import asyncHandle from "../middleware/error/asyncHandler.js";
 import cookiesConfig from "../config/cookieConfig.js";
 import axios from "axios";
 
+const getNaverAuthUrl = asyncHandle(async (req, res, next) => {
+  const state = Math.random().toString(36).substring(2, 15);
+  try {
+    const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NAVER_CLIENT_ID}&redirect_uri=${process.env.NAVER_REDIRECT_URI}&state=${state}`;
+    res.status(200).send({ naverAuthUrl });
+  } catch (error) {
+    next(error);
+  }
+});
+
+const naverCallback = asyncHandle(async (req, res, next) => {
+  const { code } = req.query;
+  
+  try {
+    const tokenResponse = await axios
+      .post(process.env.NAVER_TOKEN_URI, null, {
+        params: {
+          grant_type: "authorization_code",
+          client_id: process.env.NAVER_CLIENT_ID,
+          client_secret: process.env.NAVER_CLIENT_SECRET,
+          redirect_uri: process.env.NAVER_REDIRECT_URI,
+          code,
+        },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      });
+    const { access_token } = tokenResponse.data;
+
+    const userInfoResponse = await axios.get(process.env.NAVER_USER_INFO_URI, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+
+
+    const data = {
+      provider: "NAVER",
+      providerId: userInfoResponse.data.response.id,
+    };
+
+    let user = await userService.getProviderMe(data);
+    if (!user) {
+      user = await userService.createProviderUser({
+        ...data,
+        userName: userInfoResponse.data.response.email,
+        nickname: userInfoResponse.data.response.name,
+      });
+    }
+
+    const accessToken = userService.createToken(user);
+    const refreshToken = userService.createToken(user, "refresh");
+    const nextUser = await userService.updateUser(user.id, {
+      refreshToken,
+    });
+
+    res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
+    res.cookie("refresh-token", refreshToken, cookiesConfig.refreshTokenOption);
+
+    res.status(200).send({ message: "로그인 성공", user: nextUser });
+  } catch (error) {
+    next(error);
+  }
+});
+
 const getKakaoAuthUrl = asyncHandle(async (req, res, next) => {
   try {
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
@@ -303,4 +368,6 @@ export default {
   kakaoCallback,
   getGoogleAuthUrl,
   googleCallback,
+  getNaverAuthUrl,
+  naverCallback,
 };

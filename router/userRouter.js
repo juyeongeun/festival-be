@@ -5,6 +5,8 @@ import passport from "../config/passportConfig.js";
 const router = express.Router();
 
 // router.post("/", userController.create);
+router.get("/auth/naver/url", userController.getNaverAuthUrl);
+router.get("/auth/naver/callback", userController.naverCallback);
 router.get("/auth/kakao/url", userController.getKakaoAuthUrl);
 router.get("/auth/kakao/callback", userController.kakaoCallback);
 router.get("/auth/google/url", userController.getGoogleAuthUrl);
