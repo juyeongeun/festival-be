@@ -13,56 +13,72 @@ const getNaverAuthUrl = asyncHandle(async (req, res, next) => {
   }
 });
 
+async function getAccessToken(tokenUri, params) {
+  const response = await axios.post(tokenUri, null, {
+    params,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
+  return response.data.access_token;
+}
+
+async function getUserInfo(userInfoUri, accessToken) {
+  const response = await axios.get(userInfoUri, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data;
+}
+
+async function handleUserLogin(provider, providerId, userName, nickname) {
+  let user = await userService.getProviderMe({ provider, providerId });
+  if (!user) {
+    user = await userService.createProviderUser({
+      provider,
+      providerId,
+      userName,
+      nickname,
+    });
+  }
+  return user;
+}
+
+async function setTokensAndRespond(res, user) {
+  const accessToken = userService.createToken(user);
+  const refreshToken = userService.createToken(user, "refresh");
+  await userService.updateUser(user.id, { refreshToken });
+
+  res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
+  res.cookie("refresh-token", refreshToken, cookiesConfig.refreshTokenOption);
+
+  res.status(200).send({ message: "로그인 성공", user });
+}
+
 const naverCallback = asyncHandle(async (req, res, next) => {
   const { code } = req.query;
-  
   try {
-    const tokenResponse = await axios
-      .post(process.env.NAVER_TOKEN_URI, null, {
-        params: {
-          grant_type: "authorization_code",
-          client_id: process.env.NAVER_CLIENT_ID,
-          client_secret: process.env.NAVER_CLIENT_SECRET,
-          redirect_uri: process.env.NAVER_REDIRECT_URI,
-          code,
-        },
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      });
-    const { access_token } = tokenResponse.data;
-
-    const userInfoResponse = await axios.get(process.env.NAVER_USER_INFO_URI, {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
+    const accessToken = await getAccessToken(process.env.NAVER_TOKEN_URI, {
+      grant_type: "authorization_code",
+      client_id: process.env.NAVER_CLIENT_ID,
+      client_secret: process.env.NAVER_CLIENT_SECRET,
+      redirect_uri: process.env.NAVER_REDIRECT_URI,
+      code,
     });
 
+    const userInfo = await getUserInfo(
+      process.env.NAVER_USER_INFO_URI,
+      accessToken
+    );
+    const user = await handleUserLogin(
+      "NAVER",
+      userInfo.response.id,
+      userInfo.response.email,
+      userInfo.response.name
+    );
 
-    const data = {
-      provider: "NAVER",
-      providerId: userInfoResponse.data.response.id,
-    };
-
-    let user = await userService.getProviderMe(data);
-    if (!user) {
-      user = await userService.createProviderUser({
-        ...data,
-        userName: userInfoResponse.data.response.email,
-        nickname: userInfoResponse.data.response.name,
-      });
-    }
-
-    const accessToken = userService.createToken(user);
-    const refreshToken = userService.createToken(user, "refresh");
-    const nextUser = await userService.updateUser(user.id, {
-      refreshToken,
-    });
-
-    res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
-    res.cookie("refresh-token", refreshToken, cookiesConfig.refreshTokenOption);
-
-    res.status(200).send({ message: "로그인 성공", user: nextUser });
+    await setTokensAndRespond(res, user);
   } catch (error) {
     next(error);
   }
@@ -80,56 +96,25 @@ const getKakaoAuthUrl = asyncHandle(async (req, res, next) => {
 const kakaoCallback = asyncHandle(async (req, res, next) => {
   const { code } = req.query;
   try {
-    const tokenResponse = await axios
-      .post(process.env.KAKAO_TOKEN_URI, null, {
-        params: {
-          grant_type: "authorization_code",
-          client_id: process.env.KAKAO_CLIENT_ID,
-          redirect_uri: process.env.KAKAO_REDIRECT_URI,
-          code,
-        },
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      })
-      .catch((error) => {
-        console.error("토큰 요청 에러:", error.response.data);
-        throw error;
-      });
-    const { access_token } = tokenResponse.data;
-
-    const userInfoResponse = await axios.get(process.env.KAKAO_USER_INFO_URI, {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
+    const accessToken = await getAccessToken(process.env.KAKAO_TOKEN_URI, {
+      grant_type: "authorization_code",
+      client_id: process.env.KAKAO_CLIENT_ID,
+      redirect_uri: process.env.KAKAO_REDIRECT_URI,
+      code,
     });
 
-    const kakaoUser = userInfoResponse.data;
+    const userInfo = await getUserInfo(
+      process.env.KAKAO_USER_INFO_URI,
+      accessToken
+    );
+    const user = await handleUserLogin(
+      "KAKAO",
+      userInfo.id.toString(),
+      userInfo.kakao_account.profile.nickname,
+      userInfo.kakao_account.profile.nickname
+    );
 
-    let user = await userService.getProviderMe({
-      provider: "KAKAO",
-      providerId: kakaoUser.id.toString(),
-    });
-    if (!user) {
-      user = await userService.createProviderUser({
-        provider: "KAKAO",
-        providerId: kakaoUser.id.toString(),
-        userName: kakaoUser.kakao_account.profile.nickname,
-        nickname: kakaoUser.kakao_account.profile.nickname,
-      });
-    }
-
-    const accessToken = userService.createToken(user);
-    const refreshToken = userService.createToken(user, "refresh");
-    const nextUser = await userService.updateUser(user.id, {
-      refreshToken,
-    });
-
-    res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
-    res.cookie("refresh-token", refreshToken, cookiesConfig.refreshTokenOption);
-
-    res.status(200).send({ message: "로그인 성공", user: nextUser });
-    // res.redirect(`http://localhost:3000/success`);
+    await setTokensAndRespond(res, user);
   } catch (error) {
     next(error);
   }
@@ -145,9 +130,7 @@ const getGoogleAuthUrl = asyncHandle(async (req, res) => {
 
 const googleCallback = asyncHandle(async (req, res, next) => {
   const { code } = req.query;
-
   try {
-    // 1. 액세스 토큰 받기
     const tokenResponse = await axios.post(process.env.GOOGLE_TOKEN_URI, {
       code,
       client_id: process.env.GOOGLE_CLIENT_ID,
@@ -156,45 +139,20 @@ const googleCallback = asyncHandle(async (req, res, next) => {
       grant_type: "authorization_code",
     });
 
-    const { access_token } = tokenResponse.data;
+    const accessToken = tokenResponse.data.access_token;
+    const userInfo = await getUserInfo(
+      process.env.GOOGLE_USER_INFO_URI,
+      accessToken
+    );
+    const user = await handleUserLogin(
+      "GOOGLE",
+      userInfo.id,
+      userInfo.email,
+      userInfo.name
+    );
 
-    // 2. 사용자 정보 받기
-    const userInfoResponse = await axios.get(process.env.GOOGLE_USER_INFO_URI, {
-      headers: { Authorization: `Bearer ${access_token}` },
-    });
-
-    const googleUser = userInfoResponse.data;
-
-    // 3. 사용자 조회 또는 생성
-    let user = await userService.getProviderMe({
-      provider: "GOOGLE",
-      providerId: googleUser.id,
-    });
-
-    if (!user) {
-      // 신규 사용자 생성
-      user = await userService.createProviderUser({
-        provider: "GOOGLE",
-        providerId: googleUser.id,
-        userName: googleUser.email,
-        nickname: googleUser.name,
-      });
-    }
-
-    // 4. JWT 토큰 생성 및 쿠키 설정
-    const accessToken = userService.createToken(user);
-    const refreshToken = userService.createToken(user, "refresh");
-
-    await userService.updateUser(user.id, { refreshToken });
-
-    res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
-    res.cookie("refresh-token", refreshToken, cookiesConfig.refreshTokenOption);
-
-    // 5. 프론트엔드로 리다이렉트
-    // res.redirect(`${process.env.FRONTEND_URL}/login/success`);
-    res.status(200).send({ message: "로그인 성공", user });
+    await setTokensAndRespond(res, user);
   } catch (error) {
-    console.error("구글 로그인 에러:", error);
     next(error);
   }
 });
