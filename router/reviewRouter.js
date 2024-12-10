@@ -5,7 +5,7 @@ import passport from "../config/passportConfig.js";
 const router = express.Router();
 
 router
-  .route("/:boothId")
+  .route("/")
   .all(passport.authenticate("access-token", { session: false }))
   .post(reviewController.createReview)
   .get(reviewController.getReview);
