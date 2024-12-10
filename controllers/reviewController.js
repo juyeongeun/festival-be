@@ -29,7 +29,6 @@ const getReviewController = asyncHandle(async (req, res, next) => {
       keyword = "",
     } = req.query;
     const data = await reviewService.getReview(
-      parseInt(userId),
       parseInt(boothId),
       page,
       pageSize,

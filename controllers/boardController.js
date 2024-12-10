@@ -13,17 +13,21 @@ const adminGetBoardController = asyncHandle(async (req, res, next) => {
       pageSize = 5,
       orderBy = "recent",
       keyword = "",
-      boardType = "",
+      boardType = "BOARD",
+      startDate = "",
+      endDate = "",
     } = req.query;
     const data = await boardService.adminGetBoard(
-      parseInt(festivalId),
-      parseInt(userId),
-      parseInt(page) || 1,
-      parseInt(pageSize) || 4,
+      parseInt(festivalId, 10),
+      parseInt(userId, 10),
+      parseInt(page, 10) || 1,
+      parseInt(pageSize, 10) || 4,
       orderBy,
       keyword,
       boardType,
-      userRole
+      userRole,
+      startDate,
+      endDate
     );
     res.status(200).send(data);
   } catch (error) {
