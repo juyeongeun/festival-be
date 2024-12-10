@@ -51,7 +51,9 @@ const adminGetBoard = async (
   orderBy,
   keyword,
   boardType,
-  userRole
+  userRole,
+  startDate,
+  endDate
 ) => {
   if (userRole !== "ADMIN") {
     throw new Error("관리자가 아닙니다.");
@@ -65,7 +67,9 @@ const adminGetBoard = async (
     pageSize,
     orderBy,
     keyword,
-    boardType
+    boardType,
+    startDate,
+    endDate
   );
   return data;
 };

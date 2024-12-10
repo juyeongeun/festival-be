@@ -6,16 +6,37 @@ const adminGetBoard = (
   pageSize,
   orderBy,
   keyword,
-  boardType
+  boardType,
+  startDate,
+  endDate
 ) => {
-  const data = prisma.board.findMany({
-    where: {
-      festivalId: festivalId,
-      boardType: boardType,
-      title: {
-        contains: keyword,
+    const whereCondition = {
+      festivalId : festivalId,
+      boardType : boardType,
+      title : {
+        contains: keyword
       },
-    },
+    }
+
+  if (startDate) {
+    const startDateTime = new Date(startDate);
+    startDateTime.setUTCHours(0-9, 0, 0, 0);
+    whereCondition.createdAt = {
+      ...whereCondition.createdAt,
+      gte: startDateTime,
+    };
+  }
+  if (endDate) {
+    const endDateTime = new Date(endDate);
+    endDateTime.setUTCHours(23-9, 59, 59, 999);
+    whereCondition.createdAt = {
+      ...whereCondition.createdAt,
+      lte: endDateTime,
+    };
+  }
+
+  const data = prisma.board.findMany({
+    where: whereCondition,
     skip: (page - 1) * pageSize,
     take: pageSize,
     orderBy: {
