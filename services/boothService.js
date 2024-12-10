@@ -86,6 +86,14 @@ const deleteBooth = async (boothId, userId, festivalId, userRole) => {
   return await boothRepository.deleteBooth(boothId);
 };
 
+const getBoothName = async (festivalId) => {
+  const booths = await boothRepository.getBoothName(festivalId);
+  if (booths.length === 0) {
+    throw new Error("부스가 없습니다.");
+  }
+  return { booths };
+};
+
 export default {
   createBooth,
   getBoothAdmin,
@@ -94,4 +102,5 @@ export default {
   updateBooth,
   getMyBooths,
   deleteBooth,
+  getBoothName,
 };

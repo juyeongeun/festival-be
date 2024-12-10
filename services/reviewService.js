@@ -7,7 +7,7 @@ const deleteReview = async (userRole, reviewId) => {
   const data = await reviewRepository.deleteReview(reviewId);
   return data;
 };
-const createReview = async (userId, userRole, boothId, content, score) => {
+const createReview = async (userId, boothId, content, score) => {
   // payRepository에서 userId, boothId 비교한다음에 결제 내역을 확인한다.
   const data = await reviewRepository.createReview(
     userId,
@@ -18,13 +18,25 @@ const createReview = async (userId, userRole, boothId, content, score) => {
   return data;
 };
 
-const getReview = async (userId, boothId, page, pageSize, orderBy, keyword) => {
+const getReview = async (
+  boothId,
+  page,
+  pageSize,
+  orderBy,
+  keyword,
+  startDate,
+  endDate,
+  scoreOrder
+) => {
   const data = await reviewRepository.getReview(
     boothId,
     page,
     pageSize,
     orderBy,
-    keyword
+    keyword,
+    startDate,
+    endDate,
+    scoreOrder
   );
   return data;
 };
