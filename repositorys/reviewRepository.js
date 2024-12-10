@@ -32,7 +32,6 @@ const getReview = async (
   scoreOrder
 ) => {
   const whereCondition = {
-    boothId: boothId,
     OR: [
       {
         user: {
@@ -62,7 +61,9 @@ const getReview = async (
     };
   }
 
-  console.log("최종 where 조건:", JSON.stringify(whereCondition, null, 2));
+  if (boothId) {
+    whereCondition.boothId = boothId;
+  }
 
   const data = await prisma.review.findMany({
     where: whereCondition,

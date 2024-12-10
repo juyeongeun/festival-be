@@ -20,8 +20,8 @@ const createReviewController = asyncHandle(async (req, res, next) => {
 
 const getReviewController = asyncHandle(async (req, res, next) => {
   try {
-    const { boothId } = req.params;
     const {
+      boothId = "",
       page = 1,
       pageSize = 5,
       orderBy = "recent",
