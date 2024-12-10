@@ -165,6 +165,18 @@ const getMyBooths = (userId, festivalId) => {
   });
 };
 
+const getBoothName = (festivalId) => {
+  return prisma.booth.findMany({
+    where: {
+      festivalId: festivalId,
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+};
+
 const deleteBooth = (boothId) => {
   return prisma.booth.delete({
     where: {
@@ -180,4 +192,5 @@ export default {
   updateBooth,
   getMyBooths,
   deleteBooth,
+  getBoothName,
 };

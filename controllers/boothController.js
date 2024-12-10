@@ -160,6 +160,16 @@ const getMyBooths = asyncHandle(async (req, res, next) => {
   }
 });
 
+const getBoothName = asyncHandle(async (req, res, next) => {
+  try {
+    const { festivalId } = req.params;
+    const booths = await boothService.getBoothName(parseInt(festivalId));
+    res.status(200).send(booths);
+  } catch (error) {
+    next(error);
+  }
+});
+
 const deleteBooth = asyncHandle(async (req, res, next) => {
   try {
     const { id: userId, role: userRole } = req.user;
@@ -186,4 +196,5 @@ export default {
   updateBooth,
   getMyBooths,
   deleteBooth,
+  getBoothName,
 };

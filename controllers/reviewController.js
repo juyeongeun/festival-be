@@ -20,21 +20,25 @@ const createReviewController = asyncHandle(async (req, res, next) => {
 
 const getReviewController = asyncHandle(async (req, res, next) => {
   try {
-    const { id: userId } = req.user;
     const { boothId } = req.params;
     const {
       page = 1,
       pageSize = 5,
       orderBy = "recent",
       keyword = "",
+      startDate = "",
+      endDate = "",
+      scoreOrder = "high",
     } = req.query;
     const data = await reviewService.getReview(
-      parseInt(userId),
       parseInt(boothId),
       page,
       pageSize,
       orderBy,
-      keyword
+      keyword,
+      startDate,
+      endDate,
+      scoreOrder
     );
     res.status(200).send(data);
   } catch (error) {
