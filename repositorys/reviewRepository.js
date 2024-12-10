@@ -21,23 +21,51 @@ const createReview = async (userId, boothId, content, score) => {
   return data;
 };
 
-const getReview = async (boothId, page, pageSize, orderBy, keyword) => {
+const getReview = async (
+  boothId,
+  page,
+  pageSize,
+  orderBy,
+  keyword,
+  startDate,
+  endDate,
+  scoreOrder
+) => {
+  const whereCondition = {
+    boothId: boothId,
+    OR: [
+      {
+        user: {
+          nickname: { contains: keyword },
+        },
+      },
+      {
+        user: {
+          userName: { contains: keyword },
+        },
+      },
+    ],
+  };
+
+  // startDate와 endDate가 모두 있을 때만 날짜 조건 추가
+  if (startDate && endDate) {
+    // UTC 기준으로 변환
+    const start = new Date(startDate);
+    start.setUTCHours(0 - 9, 0, 0, 0);
+
+    const end = new Date(endDate);
+    end.setUTCHours(23 - 9, 59, 59, 999);
+
+    whereCondition.createdAt = {
+      gte: start,
+      lte: end,
+    };
+  }
+
+  console.log("최종 where 조건:", JSON.stringify(whereCondition, null, 2));
+
   const data = await prisma.review.findMany({
-    where: {
-      boothId: boothId,
-      OR: [
-        {
-          user: {
-            nickname: { contains: keyword },
-          },
-        },
-        {
-          user: {
-            userName: { contains: keyword },
-          },
-        },
-      ],
-    },
+    where: whereCondition,
     include: {
       user: {
         select: {
@@ -48,10 +76,15 @@ const getReview = async (boothId, page, pageSize, orderBy, keyword) => {
     },
     skip: (page - 1) * pageSize,
     take: pageSize,
-    orderBy: {
-      createdAt: orderBy === "recent" ? "desc" : "asc",
-    },
+    orderBy: scoreOrder
+      ? {
+          score: scoreOrder === "high" ? "desc" : "asc",
+        }
+      : {
+          createdAt: orderBy === "recent" ? "desc" : "asc",
+        },
   });
+
   return data;
 };
 

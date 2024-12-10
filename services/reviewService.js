@@ -18,13 +18,25 @@ const createReview = async (userId, boothId, content, score) => {
   return data;
 };
 
-const getReview = async (boothId, page, pageSize, orderBy, keyword) => {
+const getReview = async (
+  boothId,
+  page,
+  pageSize,
+  orderBy,
+  keyword,
+  startDate,
+  endDate,
+  scoreOrder
+) => {
   const data = await reviewRepository.getReview(
     boothId,
     page,
     pageSize,
     orderBy,
-    keyword
+    keyword,
+    startDate,
+    endDate,
+    scoreOrder
   );
   return data;
 };
