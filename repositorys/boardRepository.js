@@ -13,9 +13,33 @@ const adminGetBoard = (
     const whereCondition = {
       festivalId : festivalId,
       boardType : boardType,
-      title : {
-        contains: keyword
-      },
+      OR :[
+        {
+          title : {
+            contains: keyword
+          },
+        },
+        {
+          content : {
+            contains: keyword
+          },
+        },
+        {
+          user : {
+            userName : {
+              contains: keyword
+            }
+          }
+        },
+        {
+          user : {
+            nickname : {
+              contains: keyword
+            }
+          }
+        }
+      ]
+      
     }
 
   if (startDate) {
