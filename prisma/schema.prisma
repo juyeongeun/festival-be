@@ -145,26 +145,27 @@ model Notice {
 }
 
 model Booth {
-  id            Int        @id @default(autoincrement())
-  festivalId    Int
-  userId        Int
-  name          String //상호명
-  location      String? // 부스 위치
-  content       String // 부스 설명
-  image         String? // 부스 이미지
-  boothType     BoothType // 놀거리, 먹거리, 기타
-  typeCategory  String? // 분식, 체험, 한식, 양식, 설명회, 특산품 판매 등등
-  accept        Accept     @default(WAITING)
-  waitingTime   String?    @default("바로 가지러 오세요.")
-  accountNumber String? // 계좌
-  bankName      String? // 은행
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  festival      Festival   @relation(fields: [festivalId], references: [id])
-  user          User       @relation(fields: [userId], references: [id])
-  review        Review[]
-  menu          Menu[]
-  wishList      WishList[]
+  id             Int        @id @default(autoincrement())
+  festivalId     Int
+  userId         Int
+  name           String //상호명
+  location       String? // 부스 위치
+  content        String // 부스 설명
+  image          String? // 부스 이미지
+  boothType      BoothType // 놀거리, 먹거리, 기타
+  typeCategory   String? // 분식, 체험, 한식, 양식, 설명회, 특산품 판매 등등
+  accept         Accept     @default(WAITING)
+  waitingTime    String?    @default("바로 가지러 오세요.")
+  accountNumber  String // 계좌
+  bankName       String // 은행
+  businessNumber String // 사업자 번호
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  festival       Festival   @relation(fields: [festivalId], references: [id])
+  user           User       @relation(fields: [userId], references: [id])
+  review         Review[]
+  menu           Menu[]
+  wishList       WishList[]
 }
 
 model Review {
