@@ -24,15 +24,7 @@ const createComment = async (
   return comment;
 };
 
-const getComments = async (
-  festivalId,
-  boardId,
-  userId,
-  page,
-  pageSize,
-  orderBy
-) => {
-  await checkUser(userId, festivalId);
+const getComments = async (boardId, page, pageSize, orderBy) => {
   const comments = await commentRepository.getComments(
     boardId,
     page,

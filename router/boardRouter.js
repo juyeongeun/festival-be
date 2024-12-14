@@ -10,20 +10,24 @@ router
   .get(boardController.adminGetBoard);
 router
   .route("/:festivalId")
-  .all(passport.authenticate("access-token", { session: false }))
-  .post(boardController.createBoard)
+  .post(
+    passport.authenticate("access-token", { session: false }),
+    boardController.createBoard
+  )
   .get(boardController.getBoard);
 
 router
   .route("/:boardId/:festivalId")
-  .all(passport.authenticate("access-token", { session: false }))
-  .patch(boardController.patchBoard)
-  .delete(boardController.deleteBoard)
+  .patch(
+    passport.authenticate("access-token", { session: false }),
+    boardController.patchBoard
+  )
+  .delete(
+    passport.authenticate("access-token", { session: false }),
+    boardController.deleteBoard
+  )
   .get(boardController.getIdBoard);
 
-router
-  .route("/board-loss/:festivalId")
-  .all(passport.authenticate("access-token", { session: false }))
-  .get(boardController.getLossBoard);
+router.route("/board-loss/:festivalId").get(boardController.getLossBoard);
 
 export default router;
