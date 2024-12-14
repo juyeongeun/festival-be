@@ -22,15 +22,23 @@ router
 
 router
   .route("/:festivalId")
-  .all(passport.authenticate("access-token", { session: false }))
-  .post(boothValidation, boothController.createBooth)
+  .post(
+    passport.authenticate("access-token", { session: false }),
+    boothValidation,
+    boothController.createBooth
+  )
   .get(boothController.getBooths);
 
 router
   .route("/:boothId/:festivalId")
-  .all(passport.authenticate("access-token", { session: false }))
   .get(boothController.getBooth)
-  .patch(boothController.updateBooth)
-  .delete(boothController.deleteBooth);
+  .patch(
+    passport.authenticate("access-token", { session: false }),
+    boothController.updateBooth
+  )
+  .delete(
+    passport.authenticate("access-token", { session: false }),
+    boothController.deleteBooth
+  );
 
 export default router;

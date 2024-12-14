@@ -6,8 +6,10 @@ const router = express.Router();
 
 router
   .route("/:boothId")
-  .all(passport.authenticate("access-token", { session: false }))
-  .post(menuController.createMenu)
+  .post(
+    passport.authenticate("access-token", { session: false }),
+    menuController.createMenu
+  )
   .get(menuController.getMenu);
 
 router

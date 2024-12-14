@@ -11,8 +11,7 @@ const deleteNotice = async (userId, festivalId, noticeId, userRole) => {
   return data;
 };
 
-const getNotice = async (userId, festivalId, page, pageSize, orderBy) => {
-  await checkUser(userId, festivalId);
+const getNotice = async (festivalId, page, pageSize, orderBy) => {
   const data = await noticeRepository.getNotice(
     festivalId,
     page,
