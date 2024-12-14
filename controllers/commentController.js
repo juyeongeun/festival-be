@@ -21,13 +21,10 @@ const createComment = asyncHandle(async (req, res, next) => {
 
 const getComments = asyncHandle(async (req, res, next) => {
   try {
-    const { boardId, festivalId } = req.params;
-    const { id: userId } = req.user;
+    const { boardId } = req.params;
     const { page = 1, pageSize = 5, orderBy = "recent" } = req.query;
     const data = await commentService.getComments(
-      parseInt(festivalId),
       parseInt(boardId),
-      parseInt(userId),
       parseInt(page),
       parseInt(pageSize),
       orderBy

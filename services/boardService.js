@@ -37,8 +37,7 @@ const patchBoard = async (
   );
   return data;
 };
-const getIdBoard = async (festivalId, userId, boardId) => {
-  await checkUser(userId, festivalId);
+const getIdBoard = async (boardId) => {
   const data = await boardRepository.getIdBoard(boardId);
   return data;
 };
@@ -74,8 +73,7 @@ const adminGetBoard = async (
   return data;
 };
 
-const getLossBoard = async (festivalId, userId, page, pageSize, orderBy) => {
-  await checkUser(userId, festivalId);
+const getLossBoard = async (festivalId, page, pageSize, orderBy) => {
   const data = await boardRepository.getLossBoard(
     festivalId,
     page,
@@ -85,8 +83,7 @@ const getLossBoard = async (festivalId, userId, page, pageSize, orderBy) => {
   return data;
 };
 
-const getBoard = async (festivalId, userId, page, pageSize, orderBy) => {
-  await checkUser(userId, festivalId);
+const getBoard = async (festivalId, page, pageSize, orderBy) => {
   const data = await boardRepository.getBoard(
     festivalId,
     page,
