@@ -6,9 +6,12 @@ const router = express.Router();
 
 router
   .route("/")
-  .all(passport.authenticate("access-token", { session: false }))
-  .post(reviewController.createReview)
+  .post(
+    passport.authenticate("access-token", { session: false }),
+    reviewController.createReview
+  )
   .get(reviewController.getReview);
+
 router
   .route("/:reviewId")
   .all(passport.authenticate("access-token", { session: false }))
