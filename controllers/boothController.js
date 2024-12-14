@@ -65,7 +65,6 @@ const getBoothAdmin = asyncHandle(async (req, res, next) => {
 const getBooths = asyncHandle(async (req, res, next) => {
   try {
     const { festivalId } = req.params;
-    const { id: userId } = req.user;
     const {
       page = 1,
       pageSize = 5,
@@ -75,7 +74,6 @@ const getBooths = asyncHandle(async (req, res, next) => {
     } = req.query;
 
     const booths = await boothService.getBooths(
-      parseInt(userId),
       parseInt(festivalId),
       parseInt(page),
       parseInt(pageSize),
@@ -92,14 +90,9 @@ const getBooths = asyncHandle(async (req, res, next) => {
 
 const getBooth = asyncHandle(async (req, res, next) => {
   try {
-    const { boothId, festivalId } = req.params;
-    const { id: userId } = req.user;
+    const { boothId } = req.params;
 
-    const booth = await boothService.getBooth(
-      parseInt(boothId),
-      parseInt(userId),
-      parseInt(festivalId)
-    );
+    const booth = await boothService.getBooth(parseInt(boothId));
 
     res.status(200).send(booth);
   } catch (error) {

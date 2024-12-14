@@ -35,6 +35,7 @@ const booth = [
     accept: "WAITING",
     accountNumber: "1234-1234-1234-1234",
     bankName: "KB",
+    businessNumber: "asdfa-sdf3241",
   },
   {
     festivalId: 1,
@@ -45,6 +46,7 @@ const booth = [
     accept: "WAITING",
     accountNumber: "4132-1234-1234-1234",
     bankName: "KB",
+    businessNumber: "asdfa-sdf32-sdv411",
   },
   {
     festivalId: 2,
@@ -55,6 +57,7 @@ const booth = [
     accept: "WAITING",
     accountNumber: "4132-1234-1234-1234",
     bankName: "KB",
+    businessNumber: "asdfa-sdf3241-320983",
   },
   {
     festivalId: 2,
@@ -65,6 +68,7 @@ const booth = [
     accept: "WAITING",
     accountNumber: "4132-1234-1234-1234",
     bankName: "KB",
+    businessNumber: "asdfa-sdf324-asldj-1241",
   },
 ];
 

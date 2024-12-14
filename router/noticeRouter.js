@@ -6,9 +6,11 @@ const router = express.Router();
 
 router
   .route("/:festivalId")
-  .all(passport.authenticate("access-token", { session: false }))
   .get(noticeController.getNotice)
-  .post(noticeController.createNotice);
+  .post(
+    passport.authenticate("access-token", { session: false }),
+    noticeController.createNotice
+  );
 
 router
   .route("/:noticeId/:festivalId")

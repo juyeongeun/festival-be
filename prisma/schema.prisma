@@ -158,7 +158,7 @@ model Booth {
   waitingTime    String?    @default("바로 가지러 오세요.")
   accountNumber  String // 계좌
   bankName       String // 은행
-  businessNumber String // 사업자 번호
+  businessNumber String
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
   festival       Festival   @relation(fields: [festivalId], references: [id])

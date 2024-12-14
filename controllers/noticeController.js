@@ -18,7 +18,6 @@ const deleteNoticeController = asyncHandle(async (req, res, next) => {
 });
 const getNoticeController = asyncHandle(async (req, res, next) => {
   try {
-    const { id: userId } = req.user;
     const { festivalId } = req.params;
     const { page = 1, pageSize = 5, orderBy = "recent" } = req.query;
     const data = await noticeService.getNotice(
