@@ -70,4 +70,26 @@ const getWishlists = (userId, boothId) => {
   });
 };
 
-export default { createWishlist, updateWishlist, deleteWishlist, getWishlists };
+const getWaitingComment = async (wishlistId) => {
+  return await prisma.wishList.findFirst({
+    where: {
+      id: wishlistId,
+    },
+    include: {
+      booth: {
+        select: {
+          id: true,
+          waitingTime: true,
+        },
+      },
+    },
+  });
+};
+
+export default {
+  createWishlist,
+  updateWishlist,
+  deleteWishlist,
+  getWishlists,
+  getWaitingComment,
+};
