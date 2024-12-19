@@ -18,15 +18,22 @@ import menuRouter from "./router/menuRouter.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    exposedHeaders: ["set-cookie"],
-  })
-);
+//CORS 설정
+const allowedOrigins = ["http://localhost:3000"];
+// CORS 설정
+const corsOptions = {
+  credentials: true,
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, origin); // 허용
+    } else {
+      callback(new Error("Not allowed by CORS")); // 허용하지 않음
+    }
+  },
+  exposedHeaders: ["set-cookie"],
+};
+
+app.use(cors(corsOptions));
 
 app.use("/festival", festivalRouter);
 app.use("/participation", participationRouter);
