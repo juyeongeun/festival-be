@@ -77,13 +77,20 @@ const getPay = async (payId) => {
   }
 };
 
-const getPayByBoothId = async (userId, boothId, page, pageSize, startDate, endDate) => {
+const getPayByBoothId = async (
+  userId,
+  boothId,
+  page,
+  pageSize,
+  startDate,
+  endDate
+) => {
   const pay = await boothRepository.BoothCheck(userId, boothId);
   if (!pay) {
     throw new Error("권한이 없습니다.");
   }
+  console.log(boothId);
   const payData = await payRepository.getPayByBoothId(
-    userId,
     boothId,
     page,
     pageSize,
@@ -93,6 +100,6 @@ const getPayByBoothId = async (userId, boothId, page, pageSize, startDate, endDa
 
   const totalPrice = payData.reduce((sum, pay) => sum + pay.price, 0);
 
-  return { payData: processedPayData, totalPrice };
+  return { payData, totalPrice };
 };
 export default { createPay, getPaysByUserId, getPay, getPayByBoothId };
