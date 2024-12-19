@@ -5,8 +5,18 @@ import payController from "../controllers/payController.js";
 const router = express.Router();
 
 router
-  .route("/:wishlistId")
+  .route("/")
   .all(passport.authenticate("access-token", { session: false }))
   .post(payController.createPay);
+
+router
+  .route("/:id")
+  .all(passport.authenticate("access-token", { session: false }))
+  .get(payController.getPay);
+
+router
+  .route("/:userId")
+  .all(passport.authenticate("access-token", { session: false }))
+  .get(payController.getPaysByUserId);
 
 export default router;

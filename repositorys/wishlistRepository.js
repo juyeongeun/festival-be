@@ -86,10 +86,18 @@ const getWaitingComment = async (wishlistId) => {
   });
 };
 
+const updateWishlistStatus = async (wishlistId, status) => {
+  return await prisma.wishList.update({
+    where: { id: wishlistId },
+    data: { status },
+  });
+};
+
 export default {
   createWishlist,
   updateWishlist,
   deleteWishlist,
   getWishlists,
   getWaitingComment,
+  updateWishlistStatus,
 };

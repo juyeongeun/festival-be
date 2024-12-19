@@ -3,13 +3,12 @@ import asyncHandle from "../middleware/error/asyncHandler.js";
 
 const createPay = asyncHandle(async (req, res, next) => {
   try {
-    const { wishlistId } = req.params;
+    const { wishlistIds, totalPrice, payType } = req.body;
     const { id: userId } = req.user;
-    const { totalPrice, payType } = req.body;
 
     const data = await payService.createPay(
       parseInt(userId),
-      parseInt(wishlistId),
+      wishlistIds.map((id) => parseInt(id)),
       parseInt(totalPrice),
       payType
     );
@@ -19,4 +18,24 @@ const createPay = asyncHandle(async (req, res, next) => {
   }
 });
 
-export default { createPay };
+const getPaysByUserId = asyncHandle(async (req, res, next) => {
+  try {
+    const { id: userId } = req.user;
+    const data = await payService.getPaysByUserId(parseInt(userId));
+    res.status(200).send(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+const getPay = asyncHandle(async (req, res, next) => {
+  try {
+    const { id: payId } = req.params;
+    const data = await payService.getPay(parseInt(payId));
+    res.status(200).send(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+export default { createPay, getPaysByUserId, getPay };
