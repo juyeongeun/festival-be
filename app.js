@@ -28,29 +28,14 @@ const io = new Server(httpServer, {
 });
 
 io.on("connection", (socket) => {
-  console.log("클라이언트 연결됨");
-
-  // 사용자 인증 처리
   socket.on("authenticate", (userId) => {
-    socket.join(`user_${userId}`); // 사용자별 room 생성
+    socket.join(`user_${userId}`);
   });
 });
 
 export const sendNotification = (userId, notification) => {
   io.to(`user_${userId}`).emit("new_notification", notification);
 };
-
-app.post("/test-notification", (req, res) => {
-  const testNotification = {
-    message: "테스트 알림입니다",
-    timestamp: new Date(),
-  };
-
-  // 특정 사용자에게 알림 전송
-  io.to("user_123").emit("new_notification", testNotification);
-
-  res.json({ message: "테스트 알림이 전송되었습니다." });
-});
 
 app.use(express.json());
 const allowedOrigins = ["http://localhost:3000"];
