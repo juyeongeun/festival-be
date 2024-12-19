@@ -72,6 +72,8 @@ Festival Companion과 함께 기다림 없는 축제와 다양한 정보를 경�
   - Menu
   - Botice
   - Board
+  - AWS S3
+    
 - 주영은
   - Wishlist
   - Participation
