@@ -29,6 +29,11 @@ const getPaysByUserId = (userId) => {
           },
         },
       },
+      _count: {
+        select: {
+          wishList: true,
+        },
+      },
     },
   });
 };
