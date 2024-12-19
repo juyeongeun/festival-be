@@ -29,6 +29,11 @@ const getPaysByUserId = (userId) => {
           },
         },
       },
+      _count: {
+        select: {
+          wishList: true,
+        },
+      },
     },
   });
 };
@@ -69,14 +74,7 @@ const getPay = (payId) => {
   });
 };
 
-const getPayByBoothId = async (
-  userId,
-  boothId,
-  page,
-  pageSize,
-  startDate,
-  endDate
-) => {
+const getPayByBoothId = async (boothId, page, pageSize, startDate, endDate) => {
   const whereCondition = {
     boothId: boothId,
   };
@@ -108,15 +106,13 @@ const getPayByBoothId = async (
       userId: true,
       createdAt: true,
       price: true,
-    },
-    include: {
       user: {
         select: {
           nickname: true,
         },
       },
-      wishlist: {
-        include: {
+      wishList: {
+        select: {
           menu: {
             select: {
               name: true,
@@ -127,7 +123,7 @@ const getPayByBoothId = async (
       },
     },
   });
+  return pay;
 };
 
 export default { createPay, getPaysByUserId, getPay, getPayByBoothId };
-

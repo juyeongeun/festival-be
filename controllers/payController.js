@@ -43,7 +43,7 @@ const getPayByBoothId = asyncHandle(async (req, res, next) => {
     const { id: userId } = req.user;
     const { boothId } = req.params;
     const { page = 1, pageSize = 10, startDate = "", endDate = "" } = req.query;
-    const data = await payService.getPay(
+    const data = await payService.getPayByBoothId(
       parseInt(userId, 10),
       parseInt(boothId, 10),
       parseInt(page, 10) || 1,

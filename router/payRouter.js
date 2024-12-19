@@ -15,12 +15,12 @@ router
   .get(payController.getPay);
 
 router
-  .route("/:userId")
+  .route("/user/:userId")
   .all(passport.authenticate("access-token", { session: false }))
   .get(payController.getPaysByUserId);
 
 router
-  .route("/:boothId")
+  .route("/seller/:boothId")
   .all(passport.authenticate("access-token", { session: false }))
   .get(payController.getPayByBoothId);
 

@@ -31,6 +31,11 @@ const createPay = async (userId, wishlistIds, totalPrice, payType) => {
       throw new Error("서로 다른 부스의 상품은 함께 결제할 수 없습니다");
     }
 
+    const isPay = await wishlistRepository.isPay(wishlistIds);
+    if (isPay.some((item) => item.status === "PAID")) {
+      throw new Error("이미 결제한 내역입니다.");
+    }
+
     // pay 생성
     const pay = await payRepository.createPay({
       userId,
@@ -77,13 +82,19 @@ const getPay = async (payId) => {
   }
 };
 
-const getPayByBoothId = async (userId, boothId, page, pageSize, startDate, endDate) => {
+const getPayByBoothId = async (
+  userId,
+  boothId,
+  page,
+  pageSize,
+  startDate,
+  endDate
+) => {
   const pay = await boothRepository.BoothCheck(userId, boothId);
   if (!pay) {
     throw new Error("권한이 없습니다.");
   }
   const payData = await payRepository.getPayByBoothId(
-    userId,
     boothId,
     page,
     pageSize,
@@ -93,6 +104,6 @@ const getPayByBoothId = async (userId, boothId, page, pageSize, startDate, endDa
 
   const totalPrice = payData.reduce((sum, pay) => sum + pay.price, 0);
 
-  return { payData: processedPayData, totalPrice };
+  return { payData, totalPrice };
 };
 export default { createPay, getPaysByUserId, getPay, getPayByBoothId };
