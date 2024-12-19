@@ -89,7 +89,6 @@ const getPayByBoothId = async (
   if (!pay) {
     throw new Error("권한이 없습니다.");
   }
-  console.log(boothId);
   const payData = await payRepository.getPayByBoothId(
     boothId,
     page,
