@@ -121,4 +121,20 @@ const getPayByBoothId = async (boothId, page, pageSize, startDate, endDate) => {
   return pay;
 };
 
-export default { createPay, getPaysByUserId, getPay, getPayByBoothId };
+const getPayReview = async (userId, boothId) => {
+  const pay = await prisma.pay.findFirst({
+    where: {
+      userId,
+      boothId,
+    },
+  });
+  return pay;
+};
+
+export default {
+  createPay,
+  getPaysByUserId,
+  getPay,
+  getPayByBoothId,
+  getPayReview,
+};
