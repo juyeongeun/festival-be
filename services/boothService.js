@@ -1,8 +1,13 @@
 import boothRepository from "../repositorys/boothRepository.js";
 import checkUser from "../utils/checkUser.js";
 
-const createBooth = async (userId, festivalId, data) => {
-  const booth = await boothRepository.createBooth(userId, festivalId, data);
+const createBooth = async (userId, festivalId, data, boothImage) => {
+  const booth = await boothRepository.createBooth(
+    userId,
+    festivalId,
+    data,
+    boothImage
+  );
   return booth;
 };
 
@@ -54,7 +59,14 @@ const getBooth = async (boothId) => {
   return await boothRepository.getBooth(boothId);
 };
 
-const updateBooth = async (festivalId, boothId, userId, userRole, data) => {
+const updateBooth = async (
+  festivalId,
+  boothId,
+  userId,
+  userRole,
+  data,
+  boothImage
+) => {
   if (userRole !== "ADMIN") {
     const boothUser = await boothRepository.getBooth(boothId);
     if (boothUser.length === 0) {
@@ -66,7 +78,7 @@ const updateBooth = async (festivalId, boothId, userId, userRole, data) => {
   }
   await checkUser(userId, festivalId);
 
-  return await boothRepository.updateBooth(boothId, data);
+  return await boothRepository.updateBooth(boothId, data, boothImage);
 };
 
 const getMyBooths = async (userId, festivalId) => {

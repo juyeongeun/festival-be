@@ -10,23 +10,23 @@ const deleteMenu = async (userId, menuId, userRole) => {
   const data = await menuRepository.deleteMenu(menuId);
   return data;
 };
-const patchMenu = async (menuId, name, price, content, image) => {
+const patchMenu = async (menuId, name, price, content, menuImage) => {
   const data = await menuRepository.patchMenu(
     menuId,
     name,
     price,
     content,
-    image
+    menuImage
   );
   return data;
 };
-const createMenu = async (boothId, name, price, content, image) => {
+const createMenu = async (boothId, name, price, content, menuImage) => {
   const data = await menuRepository.createMenu(
     boothId,
     name,
     price,
     content,
-    image
+    menuImage
   );
   return data;
 };

@@ -53,7 +53,8 @@ const patchBoardController = asyncHandle(async (req, res, next) => {
   try {
     const { id: userId } = req.user;
     const { festivalId, boardId } = req.params;
-    const { title, content, images, boardType, lossType } = req.body;
+    const { title, content, boardType, lossType } = req.body;
+    const images = req.files.map((file) => file.location);
 
     const data = await boardService.patchBoard(
       parseInt(userId),
@@ -116,7 +117,8 @@ const createBoardController = asyncHandle(async (req, res, next) => {
   try {
     const { id: userId } = req.user;
     const { festivalId } = req.params;
-    const { title, content, images, boardType, lossType } = req.body;
+    const { title, content, boardType, lossType } = req.body;
+    const images = req.files.map((file) => file.location);
 
     const data = await boardService.createBoard(
       parseInt(userId),
