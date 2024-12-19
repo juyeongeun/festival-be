@@ -1,24 +1,42 @@
 import payService from "../services/payService.js";
 import asyncHandle from "../middleware/error/asyncHandler.js";
 
-// const createPay = asyncHandle(async (req, res, next) => {
-//   try {
-//     const { wishlistId } = req.params;
-//     const { id: userId } = req.user;
-//     const { totalPrice } = req.body;
+const createPay = asyncHandle(async (req, res, next) => {
+  try {
+    const { wishlistIds, totalPrice, payType } = req.body;
+    const { id: userId } = req.user;
 
-//     const data = await payService.createPay(
-//       parseInt(userId),
-//       parseInt(wishlistId),
-//       totalPrice
-//     );
-//     res.status(200).send(data);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+    const data = await payService.createPay(
+      parseInt(userId),
+      wishlistIds.map((id) => parseInt(id)),
+      parseInt(totalPrice),
+      payType
+    );
+    res.status(201).send(data);
+  } catch (error) {
+    next(error);
+  }
+});
 
-// export default { createPay };
+const getPaysByUserId = asyncHandle(async (req, res, next) => {
+  try {
+    const { id: userId } = req.user;
+    const data = await payService.getPaysByUserId(parseInt(userId));
+    res.status(200).send(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+const getPay = asyncHandle(async (req, res, next) => {
+  try {
+    const { id: payId } = req.params;
+    const data = await payService.getPay(parseInt(payId));
+    res.status(200).send(data);
+  } catch (error) {
+    next(error);
+  }
+});
 
 const getPayByBoothId = asyncHandle(async (req, res, next) => {
   try {
@@ -39,4 +57,4 @@ const getPayByBoothId = asyncHandle(async (req, res, next) => {
   }
 });
 
-export default { getPayByBoothId };
+export default { createPay, getPaysByUserId, getPay, getPayByBoothId };
