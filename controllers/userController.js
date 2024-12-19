@@ -50,7 +50,7 @@ const getNaverAuthUrl = asyncHandle(async (req, res, next) => {
   const state = Math.random().toString(36).substring(2, 15);
   try {
     const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NAVER_CLIENT_ID}&redirect_uri=${process.env.NAVER_REDIRECT_URI}&state=${state}`;
-    res.status(200).redirect(naverAuthUrl);
+    res.status(200).send(naverAuthUrl);
   } catch (error) {
     next(error);
   }
@@ -87,7 +87,7 @@ const naverCallback = asyncHandle(async (req, res, next) => {
 const getKakaoAuthUrl = asyncHandle(async (req, res, next) => {
   try {
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
-    res.status(200).redirect(kakaoAuthUrl);
+    res.status(200).send(kakaoAuthUrl);
   } catch (error) {
     next(error);
   }
@@ -125,7 +125,7 @@ const getGoogleAuthUrl = asyncHandle(async (req, res) => {
 
   const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${process.env.GOOGLE_REDIRECT_URI}&response_type=code&scope=${scope}&access_type=offline`;
 
-  res.status(200).redirect(url);
+  res.status(200).send(url);
 });
 
 const googleCallback = asyncHandle(async (req, res, next) => {

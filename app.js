@@ -14,13 +14,31 @@ import payRouter from "./router/payRouter.js";
 import notificationRouter from "./router/notificationRouter.js";
 import reviewRouter from "./router/reviewRouter.js";
 import menuRouter from "./router/menuRouter.js";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 dotenv.config();
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  socket.on("authenticate", (userId) => {
+    socket.join(`user_${userId}`);
+  });
+});
+
+export const sendNotification = (userId, notification) => {
+  io.to(`user_${userId}`).emit("new_notification", notification);
+};
+
 app.use(express.json());
-//CORS 설정
 const allowedOrigins = ["http://localhost:3000"];
-// CORS 설정
 const corsOptions = {
   credentials: true,
   origin: function (origin, callback) {
@@ -50,4 +68,4 @@ app.use("/menu", menuRouter);
 
 app.use(errorHandler);
 
-app.listen(3001, () => console.log("http://localhost:3001"));
+httpServer.listen(3001);
