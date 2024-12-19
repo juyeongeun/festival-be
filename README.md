@@ -10,12 +10,12 @@
     <tbody>
       <tr>
         <td align="center">
-          <img src="https://github.com/user-attachments/assets/377290ba-16b8-4a5b-b70f-4527ec8a6edc" width="150px;" alt="김민수"/><br />
+          <img src="https://github.com/user-attachments/assets/377290ba-16b8-4a5b-b70f-4527ec8a6edc" width="150px;" height=180px" alt="김민수"/><br />
           <b>BE 팀원: 김민수</b><br />
           <sub><a href="https://github.com/Minsugar98">GitHub 프로필</a></sub>
         </td>
         <td align="center">
-          <img src="https://github.com/user-attachments/assets/ddbd4893-8917-46bd-b4f1-44bfd2c7ac9c" width="150px;" alt="주영은"/><br />
+          <img src="https://github.com/user-attachments/assets/ddbd4893-8917-46bd-b4f1-44bfd2c7ac9c" width="150px;" height="180px;" alt="주영은"/><br />
           <b>BE 팀원: 주영은</b><br />
           <sub><a href="https://github.com/juyeongeun">GitHub 프로필</a></sub>
         </td>
