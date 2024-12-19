@@ -5,22 +5,16 @@ const createBooth = asyncHandle(async (req, res, next) => {
   try {
     const { id: userId } = req.user;
     const { festivalId } = req.params;
-    const {
-      name,
-      content,
-      image,
-      boothType,
-      typeCategory,
-      accountNumber,
-      bankName,
-    } = req.body;
+    const boothImage = req.file ? req.file.location : undefined;
+    const { name, content, boothType, typeCategory, accountNumber, bankName } =
+      req.body;
     const booth = await boothService.createBooth(
       parseInt(userId),
       parseInt(festivalId),
       {
         name,
         content,
-        image,
+        boothImage,
         boothType,
         typeCategory,
         accountNumber,
@@ -104,10 +98,10 @@ const updateBooth = asyncHandle(async (req, res, next) => {
   try {
     const { id: userId, role: userRole } = req.user;
     const { festivalId, boothId } = req.params;
+    const boothImage = req.file ? req.file.location : undefined;
     const {
       name,
       content,
-      image,
       boothType,
       typeCategory,
       accountNumber,
@@ -123,7 +117,7 @@ const updateBooth = asyncHandle(async (req, res, next) => {
       {
         name,
         content,
-        image,
+        boothImage,
         boothType,
         typeCategory,
         accountNumber,

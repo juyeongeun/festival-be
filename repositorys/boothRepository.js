@@ -1,6 +1,6 @@
 import prisma from "../utils/prismaClient.js";
 
-const createBooth = (userId, festivalId, data) => {
+const createBooth = (userId, festivalId, data, boothImage) => {
   return prisma.booth.create({
     data: {
       user: {
@@ -14,6 +14,7 @@ const createBooth = (userId, festivalId, data) => {
         },
       },
       ...data,
+      image: boothImage,
     },
   });
 };
@@ -130,12 +131,15 @@ const getBooth = (boothId) => {
   });
 };
 
-const updateBooth = (boothId, data) => {
+const updateBooth = (boothId, data, boothImage) => {
   return prisma.booth.update({
     where: {
       id: boothId,
     },
-    data,
+    data: {
+      ...data,
+      image: boothImage,
+    },
   });
 };
 

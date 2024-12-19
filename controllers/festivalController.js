@@ -3,8 +3,7 @@ import asyncHandle from "../middleware/error/asyncHandler.js";
 const patchFestivalController = asyncHandle(async (req, res, next) => {
   try {
     const { festivalId } = req.params;
-    const { mapImage } = req.body;
-
+    const mapImage = req.file ? req.file.location : undefined;
     const data = await festivalService.patchFestivalImg(
       parseInt(festivalId),
       mapImage
@@ -14,7 +13,5 @@ const patchFestivalController = asyncHandle(async (req, res, next) => {
     next(error);
   }
 });
-
-
 
 export default { patchFestival: patchFestivalController };
