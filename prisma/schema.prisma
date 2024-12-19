@@ -212,7 +212,7 @@ model Pay {
   id            Int      @id @default(autoincrement())
   userId        Int
   boothId       Int
-  payType       PayType
+  payType       PayType?
   price         Int
   waitingNumber String
   isReviewed    Boolean  @default(false)
