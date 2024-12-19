@@ -139,6 +139,13 @@ const updateBooth = (boothId, data) => {
   });
 };
 
+const BoothCheck = async (userId, boothId) => {
+  const pay = await prisma.booth.findFirst({
+    where: { userId: userId, id: boothId },
+  });
+  return pay;
+};
+
 const getMyBooths = (userId, festivalId) => {
   return prisma.booth.findFirst({
     where: {
@@ -193,4 +200,5 @@ export default {
   getMyBooths,
   deleteBooth,
   getBoothName,
+  BoothCheck,
 };
