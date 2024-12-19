@@ -1,10 +1,27 @@
-// import express from "express";
-// import passport from "../config/passportConfig.js";
-// import payController from "../controllers/payController.js";
+import express from "express";
+import passport from "../config/passportConfig.js";
+import payController from "../controllers/payController.js";
 
-// const router = express.Router();
+const router = express.Router();
 
-// router
-//   .route("/:wishlistId")
-//   .all(passport.authenticate("access-token", { session: false }))
-//   .post(payController.createPay);
+router
+  .route("/")
+  .all(passport.authenticate("access-token", { session: false }))
+  .post(payController.createPay);
+
+router
+  .route("/:id")
+  .all(passport.authenticate("access-token", { session: false }))
+  .get(payController.getPay);
+
+router
+  .route("/:userId")
+  .all(passport.authenticate("access-token", { session: false }))
+  .get(payController.getPaysByUserId);
+
+router
+  .route("/:boothId")
+  .all(passport.authenticate("access-token", { session: false }))
+  .get(payController.getPayByBoothId);
+
+export default router;
