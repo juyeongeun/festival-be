@@ -4,13 +4,14 @@ import menuService from "../services/menuService.js";
 const createMenuController = asyncHandle(async (req, res, next) => {
   try {
     const { boothId } = req.params;
-    const { name, price, content, image } = req.body;
+    const { name, price, content } = req.body;
+    const menuImage = req.file ? req.file.location : undefined;
     const data = await menuService.createMenu(
       parseInt(boothId),
       name,
       parseInt(price),
       content,
-      image
+      menuImage
     );
     res.status(201).send(data);
   } catch (error) {
@@ -31,13 +32,14 @@ const getMenuController = asyncHandle(async (req, res, next) => {
 const patchMenuController = asyncHandle(async (req, res, next) => {
   try {
     const { menuId } = req.params;
-    const { name, price, content, image } = req.body;
+    const { name, price, content } = req.body;
+    const menuImage = req.file ? req.file.location : undefined;
     const data = await menuService.patchMenu(
       parseInt(menuId),
       name,
       parseInt(price),
       content,
-      image
+      menuImage
     );
     res.status(200).send(data);
   } catch (error) {

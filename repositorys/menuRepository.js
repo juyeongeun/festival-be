@@ -7,14 +7,14 @@ const deleteMenu = (menuId) => {
     },
   });
 };
-const createMenu = (boothId, name, price, content, image) => {
+const createMenu = (boothId, name, price, content, menuImage) => {
   return prisma.menu.create({
     data: {
       boothId: boothId,
       name: name,
       price: price,
       content: content,
-      image: image,
+      image: menuImage,
     },
   });
 };
@@ -27,7 +27,7 @@ const getMenu = (boothId) => {
   });
 };
 
-const patchMenu = (menuId, name, price, content, image) => {
+const patchMenu = (menuId, name, price, content, menuImage) => {
   return prisma.menu.update({
     where: {
       id: menuId,
@@ -36,7 +36,7 @@ const patchMenu = (menuId, name, price, content, image) => {
       name: name,
       price: price,
       content: content,
-      image: image,
+      image: menuImage,
     },
   });
 };
