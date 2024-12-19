@@ -20,7 +20,7 @@ import asyncHandle from "../middleware/error/asyncHandler.js";
 
 // export default { createPay };
 
-const getPay = asyncHandle(async (req, res, next) => {
+const getPayByBoothId = asyncHandle(async (req, res, next) => {
   try {
     const { id: userId } = req.user;
     const { boothId } = req.params;
@@ -39,4 +39,4 @@ const getPay = asyncHandle(async (req, res, next) => {
   }
 });
 
-export default { getPay };
+export default { getPayByBoothId };

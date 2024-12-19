@@ -12,6 +12,6 @@ const router = express.Router();
 router
   .route("/:boothId")
   .all(passport.authenticate("access-token", { session: false }))
-  .get(payController.getPay);
+  .get(payController.getPayByBoothId);
 
 export default router;
