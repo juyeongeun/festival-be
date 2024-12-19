@@ -31,6 +31,11 @@ const createPay = async (userId, wishlistIds, totalPrice, payType) => {
       throw new Error("서로 다른 부스의 상품은 함께 결제할 수 없습니다");
     }
 
+    const isPay = await wishlistRepository.isPay(wishlistIds);
+    if (isPay.some((item) => item.status === "PAID")) {
+      throw new Error("이미 결제한 내역입니다.");
+    }
+
     // pay 생성
     const pay = await payRepository.createPay({
       userId,

@@ -93,6 +93,15 @@ const updateWishlistStatus = async (wishlistId, status) => {
   });
 };
 
+const isPay = async (wishlistIds) => {
+  return await prisma.wishList.findMany({
+    where: { id: { in: wishlistIds } },
+    select: {
+      status: true,
+    },
+  });
+};
+
 export default {
   createWishlist,
   updateWishlist,
@@ -100,4 +109,5 @@ export default {
   getWishlists,
   getWaitingComment,
   updateWishlistStatus,
+  isPay,
 };
