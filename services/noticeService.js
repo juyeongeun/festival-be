@@ -1,6 +1,8 @@
 import noticeRepository from "../repositorys/noticeRepository.js";
 import checkUser from "../utils/checkUser.js";
 import notificationRepository from "../repositorys/notificationRepository.js";
+import participationRepository from "../repositorys/participationRepository.js";
+import { sendNotification } from "../app.js";
 
 const deleteNotice = async (userId, festivalId, noticeId, userRole) => {
   if (userRole !== "ADMIN") {
@@ -48,6 +50,12 @@ const createNotice = async (userId, festivalId, userRole, content) => {
         user.userId,
         content
       );
+      sendNotification(user.userId, {
+        type: "notice",
+        message: content,
+        data: { noticeId: data.id },
+        createdAt: new Date(),
+      });
     })
   );
   return data;
