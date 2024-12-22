@@ -22,7 +22,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
   },
 });
@@ -38,7 +38,7 @@ export const sendNotification = (userId, notification) => {
 };
 
 app.use(express.json());
-const allowedOrigins = ["http://localhost:3000"];
+const allowedOrigins = ["http://localhost:5173"];
 const corsOptions = {
   credentials: true,
   origin: function (origin, callback) {
