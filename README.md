@@ -10,7 +10,7 @@
     <tbody>
       <tr>
         <td align="center">
-          <img src="https://github.com/user-attachments/assets/377290ba-16b8-4a5b-b70f-4527ec8a6edc" width="150px;" height=180px" alt="김민수"/><br />
+          <img src="https://github.com/user-attachments/assets/bce92c0f-1948-42bf-b5ea-de410b250d3e" width="150px;" height=180px" alt="김민수"/><br />
           <b>BE 팀원: 김민수</b><br />
           <sub><a href="https://github.com/Minsugar98">GitHub 프로필</a></sub>
         </td>
