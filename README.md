@@ -15,7 +15,7 @@
           <sub><a href="https://github.com/Minsugar98">GitHub 프로필</a></sub>
         </td>
         <td align="center">
-          <img src="https://github.com/user-attachments/assets/ddbd4893-8917-46bd-b4f1-44bfd2c7ac9c" width="150px;" height="180px;" alt="주영은"/><br />
+          <img src="https://github.com/user-attachments/assets/d891e028-511f-4d7e-a08b-d11a63e9826b" width="150px;" height="180px;" alt="주영은"/><br />
           <b>BE 팀원: 주영은</b><br />
           <sub><a href="https://github.com/juyeongeun">GitHub 프로필</a></sub>
         </td>
