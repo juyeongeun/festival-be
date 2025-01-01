@@ -37,20 +37,20 @@ export const sendNotification = (userId, notification) => {
   io.to(`user_${userId}`).emit("new_notification", notification);
 };
 
-app.use(express.json());
 const allowedOrigins = ["http://localhost:5173"];
 const corsOptions = {
   credentials: true,
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, origin); // 허용
+      callback(null, origin);
     } else {
-      callback(new Error("Not allowed by CORS")); // 허용하지 않음
+      callback(new Error("Not allowed by CORS"));
     }
   },
   exposedHeaders: ["set-cookie"],
 };
 
+app.use(express.json());
 app.use(cors(corsOptions));
 
 app.use("/festival", festivalRouter);
