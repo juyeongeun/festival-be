@@ -17,6 +17,10 @@ import menuRouter from "./router/menuRouter.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+});
+
 dotenv.config();
 const app = express();
 const httpServer = createServer(app);
@@ -68,4 +72,10 @@ app.use("/menu", menuRouter);
 
 app.use(errorHandler);
 
-httpServer.listen(3001);
+httpServer.listen(3001, (err) => {
+  if (err) {
+    console.error("Server failed to start:", err);
+    return;
+  }
+  console.log("Server is running on port 3001");
+});
