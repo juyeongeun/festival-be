@@ -4,10 +4,13 @@ import passport from "../config/passportConfig.js";
 import { uploadImage } from "../middleware/image/uploadMiddleware.js";
 const router = express.Router();
 
+router.route("/board-loss/:festivalId").get(boardController.getLossBoard);
+
 router
   .route("/admin/:festivalId")
   .all(passport.authenticate("access-token", { session: false }))
   .get(boardController.adminGetBoard);
+
 router
   .route("/:festivalId")
   .post(
@@ -29,7 +32,5 @@ router
     boardController.deleteBoard
   )
   .get(boardController.getIdBoard);
-
-router.route("/board-loss/:festivalId").get(boardController.getLossBoard);
 
 export default router;
