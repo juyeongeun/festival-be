@@ -4,14 +4,14 @@ import passport from "../config/passportConfig.js";
 
 const router = express.Router();
 
+router.route("/").get(reviewController.getReview);
+
 router
-  .route("/")
+  .route("/:boothId")
   .post(
     passport.authenticate("access-token", { session: false }),
     reviewController.createReview
-  )
-  .get(reviewController.getReview);
-
+  );
 router
   .route("/:reviewId")
   .all(passport.authenticate("access-token", { session: false }))

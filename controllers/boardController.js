@@ -88,8 +88,8 @@ const getLossBoardController = asyncHandle(async (req, res, next) => {
     const { page = 1, pageSize = 5, orderBy = "recent" } = req.query;
     const data = await boardService.getLossBoard(
       parseInt(festivalId),
-      page,
-      pageSize,
+      parseInt(page),
+      parseInt(pageSize),
       orderBy
     );
     res.status(200).send(data);
