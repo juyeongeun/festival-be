@@ -32,8 +32,8 @@ const getReviewController = asyncHandle(async (req, res, next) => {
     } = req.query;
     const data = await reviewService.getReview(
       parseInt(boothId),
-      page,
-      pageSize,
+      parseInt(page),
+      parseInt(pageSize),
       orderBy,
       keyword,
       startDate,
@@ -48,7 +48,7 @@ const getReviewController = asyncHandle(async (req, res, next) => {
 
 const deleteReviewController = asyncHandle(async (req, res, next) => {
   try {
-    const { id: userId, role: userRole } = req.user;
+    const { role: userRole } = req.user;
     const { reviewId } = req.params;
     const data = await reviewService.deleteReview(userRole, parseInt(reviewId));
     res.status(200).send(data);

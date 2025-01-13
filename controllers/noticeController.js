@@ -20,11 +20,12 @@ const getNoticeController = asyncHandle(async (req, res, next) => {
   try {
     const { festivalId } = req.params;
     const { page = 1, pageSize = 5, orderBy = "recent" } = req.query;
+    const { id: userId } = req.user;
     const data = await noticeService.getNotice(
       parseInt(userId),
       parseInt(festivalId),
-      page,
-      pageSize,
+      parseInt(page),
+      parseInt(pageSize),
       orderBy
     );
     res.status(200).send(data);
