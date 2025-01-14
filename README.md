@@ -70,7 +70,7 @@ Festival Companion과 함께 기다림 없는 축제와 다양한 정보를 경�
   - Review
   - Notification
   - Menu
-  - Botice
+  - Notice
   - Board
   - AWS S3
     
