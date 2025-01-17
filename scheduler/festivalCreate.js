@@ -1,6 +1,7 @@
 import axios from "axios";
 import dotenv from "dotenv";
 import prisma from "../utils/prismaClient.js";
+import userService from "../services/userService.js";
 dotenv.config();
 
 const createFestival = async () => {
@@ -11,7 +12,7 @@ const createFestival = async () => {
     for (const festival of festivalData) {
       const { contentid, firstimage } = festival;
       const festivalCode = parseInt(contentid);
-      await prisma.festival.upsert({
+      const festivalData = await prisma.festival.upsert({
         where: { festivalCode },
         update: {
           mapImage: firstimage,
@@ -20,6 +21,12 @@ const createFestival = async () => {
           festivalCode,
           mapImage: firstimage,
         },
+      });
+
+      await userService.createNormalUser({
+        userName: contentid,
+        password: process.env.COMMON_PASSWORD,
+        festivalId: festivalData.id,
       });
     }
   } catch (error) {

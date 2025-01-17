@@ -21,7 +21,7 @@ jobs:
         run: npm install
 
       - name: Run festival update script
-        run: node /scheduler/festivalCreate.js
+        run: node ./scheduler/festivalCreate.js
         env:
           DATA_SERVICE_URL: ${{ secrets.DATA_SERVICE_URL }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
