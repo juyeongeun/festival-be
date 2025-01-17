@@ -2,6 +2,9 @@ import userRepository from "../repositorys/userRepository.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 const filterSensitiveUserData = (user) => {
   //리스폰스의 민감한 정보를 빼고 보낸다
@@ -57,22 +60,38 @@ const createProviderUser = async (data) => {
 const createNormalUser = async (data) => {
   const userByUserName = await userRepository.getUserByUserName(data.userName);
   if (userByUserName) {
-    const error = new Error("Unprocessable Entity");
-    error.status = 422;
-    error.data = {
-      message: "이미 존재하는 사용자입니다.",
-      userName: userByUserName.userName,
-      column: "userName",
-    };
-    throw error;
+    return;
   }
 
   const hashedPassword = await bcrypt.hash(data.password, 10);
-  const newUser = await userRepository.createNormalUser({
-    ...data,
-    role: "ADMIN",
-    password: hashedPassword,
+
+  const newUser = await prisma.$transaction(async (prisma) => {
+    const createdUser = await prisma.user.create({
+      data: {
+        userName: data.userName,
+        role: "ADMIN",
+        password: hashedPassword,
+      },
+    });
+
+    await prisma.participation.create({
+      data: {
+        user: {
+          connect: {
+            id: createdUser.id,
+          },
+        },
+        festival: {
+          connect: {
+            id: data.festivalId,
+          },
+        },
+      },
+    });
+
+    return createdUser;
   });
+
   return filterSensitiveUserData(newUser);
 };
 

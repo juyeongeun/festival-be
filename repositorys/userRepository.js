@@ -14,6 +14,13 @@ const getUserByUserName = (userName) => {
     where: {
       userName: userName,
     },
+    include: {
+      participation: {
+        select: {
+          festivalId: true,
+        },
+      },
+    },
   });
 };
 
@@ -23,6 +30,13 @@ const updateUser = (id, data) => {
       id: id,
     },
     data,
+    include: {
+      participation: {
+        select: {
+          festivalId: true,
+        },
+      },
+    },
   });
 };
 
@@ -31,7 +45,7 @@ const createProviderUser = (data) => {
 };
 
 const createNormalUser = (data) => {
-  return prisma.user.create({ data });
+  prisma.user.create({ data });
 };
 
 const getUserById = (id) => {
