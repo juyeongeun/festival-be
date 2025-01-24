@@ -16,6 +16,11 @@ router
   .get(boothController.getBoothAdmin);
 
 router
+  .route("/admin/:festivalId/:boothId")
+  .all(passport.authenticate("access-token", { session: false }))
+  .patch(boothController.acceptBooth);
+
+router
   .route("/admin/:festivalId/booth-name")
   .all(passport.authenticate("access-token", { session: false }))
   .get(boothController.getBoothName);
