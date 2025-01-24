@@ -195,6 +195,20 @@ const deleteBooth = (boothId) => {
     },
   });
 };
+
+const acceptBooth = async (boothId, location, type) => {
+  const booth = await prisma.booth.update({
+    where: {
+      id: boothId,
+    },
+    data: {
+      accept: type,
+      location: location,
+    },
+  });
+  return booth;
+};
+
 export default {
   createBooth,
   getBoothAdmin,
@@ -205,4 +219,5 @@ export default {
   deleteBooth,
   getBoothName,
   BoothCheck,
+  acceptBooth,
 };

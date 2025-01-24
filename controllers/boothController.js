@@ -175,6 +175,27 @@ const deleteBooth = asyncHandle(async (req, res, next) => {
   }
 });
 
+const acceptBooth = asyncHandle(async (req, res, next) => {
+  try {
+    const { id: adminId, role: userRole } = req.user;
+    const { festivalId, boothId } = req.params;
+    const { location, type } = req.body;
+
+    await boothService.acceptBooth({
+      adminId: parseInt(adminId),
+      festivalId: parseInt(festivalId),
+      boothId: parseInt(boothId),
+      location,
+      type,
+      userRole,
+    });
+
+    res.status(200).send({ message: "부스 승인이 완료되었습니다." });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default {
   createBooth,
   getBoothAdmin,
@@ -184,4 +205,5 @@ export default {
   getMyBooths,
   deleteBooth,
   getBoothName,
+  acceptBooth,
 };
