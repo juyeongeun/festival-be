@@ -103,6 +103,21 @@ const getBoothName = async (festivalId) => {
   return { booths };
 };
 
+const acceptBooth = async (data) => {
+  await checkUser(data.adminId, data.festivalId);
+
+  if (data.userRole !== "ADMIN") {
+    throw new Error("ADMIN만 승인할 수 있습니다.");
+  }
+
+  const acceptBooth = await boothRepository.acceptBooth(
+    data.boothId,
+    data.location,
+    data.type
+  );
+  return { acceptBooth };
+};
+
 export default {
   createBooth,
   getBoothAdmin,
@@ -112,4 +127,5 @@ export default {
   getMyBooths,
   deleteBooth,
   getBoothName,
+  acceptBooth,
 };

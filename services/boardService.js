@@ -1,5 +1,6 @@
 import boardRepository from "../repositorys/boardRepository.js";
 import checkUser from "../utils/checkUser.js";
+import userRepository from "../repositorys/userRepository.js";
 
 const deleteBoard = async (userId, festivalId, boardId) => {
   await checkUser(userId, festivalId);
@@ -39,6 +40,9 @@ const patchBoard = async (
 };
 const getIdBoard = async (boardId) => {
   const data = await boardRepository.getIdBoard(boardId);
+  const user = await userRepository.getUserById(data.userId);
+  data.userName = user.userName;
+  data.nickname = user.nickname;
   return data;
 };
 
@@ -70,7 +74,18 @@ const adminGetBoard = async (
     startDate,
     endDate
   );
-  return data;
+
+  const boardsWithUserInfo = await Promise.all(
+    data.map(async (board) => {
+      const user = await userRepository.getUserById(board.userId);
+      return {
+        ...board,
+        userName: user.userName,
+        nickname: user.nickname,
+      };
+    })
+  );
+  return boardsWithUserInfo;
 };
 
 const getLossBoard = async (festivalId, page, pageSize, orderBy) => {
@@ -80,7 +95,17 @@ const getLossBoard = async (festivalId, page, pageSize, orderBy) => {
     pageSize,
     orderBy
   );
-  return data;
+  const boardsWithUserInfo = await Promise.all(
+    data.map(async (board) => {
+      const user = await userRepository.getUserById(board.userId);
+      return {
+        ...board,
+        userName: user.userName,
+        nickname: user.nickname,
+      };
+    })
+  );
+  return boardsWithUserInfo;
 };
 
 const getBoard = async (festivalId, page, pageSize, orderBy) => {
@@ -90,7 +115,18 @@ const getBoard = async (festivalId, page, pageSize, orderBy) => {
     pageSize,
     orderBy
   );
-  return data;
+  const boardsWithUserInfo = await Promise.all(
+    data.map(async (board) => {
+      const user = await userRepository.getUserById(board.userId);
+      return {
+        ...board,
+        userName: user.userName,
+        nickname: user.nickname,
+      };
+    })
+  );
+
+  return boardsWithUserInfo;
 };
 
 const createBoard = async (
