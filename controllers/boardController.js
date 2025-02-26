@@ -13,7 +13,7 @@ const adminGetBoardController = asyncHandle(async (req, res, next) => {
       pageSize = 5,
       orderBy = "recent",
       keyword = "",
-      boardType = "BOARD",
+      boardType = "",
       startDate = "",
       endDate = "",
     } = req.query;
