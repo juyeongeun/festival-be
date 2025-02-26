@@ -43,7 +43,7 @@ async function setTokensAndRespond(res, user) {
   res.cookie("access-token", accessToken, cookiesConfig.accessTokenOption);
   res.cookie("refresh-token", refreshToken, cookiesConfig.refreshTokenOption);
 
-  res.status(200).send({ message: "로그인 성공", user });
+  res.status(200).redirect(process.env.FRONTEND_URL);
 }
 
 const getNaverAuthUrl = asyncHandle(async (req, res, next) => {
