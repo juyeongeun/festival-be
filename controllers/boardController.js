@@ -85,12 +85,20 @@ const getIdBoardController = asyncHandle(async (req, res, next) => {
 const getLossBoardController = asyncHandle(async (req, res, next) => {
   try {
     const { festivalId } = req.params;
-    const { page = 1, pageSize = 5, orderBy = "recent" } = req.query;
+    const {
+      page = 1,
+      pageSize = 5,
+      orderBy = "recent",
+      typeSelect = "",
+      keyword = "",
+    } = req.query;
     const data = await boardService.getLossBoard(
       parseInt(festivalId),
       parseInt(page),
       parseInt(pageSize),
-      orderBy
+      orderBy,
+      typeSelect,
+      keyword
     );
     res.status(200).send(data);
   } catch (error) {
@@ -104,8 +112,8 @@ const getBoardController = asyncHandle(async (req, res, next) => {
     const { page = 1, pageSize = 5, orderBy = "recent" } = req.query;
     const data = await boardService.getBoard(
       parseInt(festivalId),
-      page,
-      pageSize,
+      parseInt(page),
+      parseInt(pageSize),
       orderBy
     );
     res.status(200).send(data);

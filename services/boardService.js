@@ -88,12 +88,21 @@ const adminGetBoard = async (
   return boardsWithUserInfo;
 };
 
-const getLossBoard = async (festivalId, page, pageSize, orderBy) => {
+const getLossBoard = async (
+  festivalId,
+  page,
+  pageSize,
+  orderBy,
+  typeSelect,
+  keyword
+) => {
   const data = await boardRepository.getLossBoard(
     festivalId,
     page,
     pageSize,
-    orderBy
+    orderBy,
+    typeSelect,
+    keyword
   );
   const boardsWithUserInfo = await Promise.all(
     data.map(async (board) => {
