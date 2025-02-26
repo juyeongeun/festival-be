@@ -10,41 +10,40 @@ const adminGetBoard = (
   startDate,
   endDate
 ) => {
-    const whereCondition = {
-      festivalId : festivalId,
-      boardType : boardType,
-      OR :[
-        {
-          title : {
-            contains: keyword
+  const whereCondition = {
+    festivalId: festivalId,
+    boardType: boardType,
+    OR: [
+      {
+        title: {
+          contains: keyword,
+        },
+      },
+      {
+        content: {
+          contains: keyword,
+        },
+      },
+      {
+        user: {
+          userName: {
+            contains: keyword,
           },
         },
-        {
-          content : {
-            contains: keyword
+      },
+      {
+        user: {
+          nickname: {
+            contains: keyword,
           },
         },
-        {
-          user : {
-            userName : {
-              contains: keyword
-            }
-          }
-        },
-        {
-          user : {
-            nickname : {
-              contains: keyword
-            }
-          }
-        }
-      ]
-      
-    }
+      },
+    ],
+  };
 
   if (startDate) {
     const startDateTime = new Date(startDate);
-    startDateTime.setUTCHours(0-9, 0, 0, 0);
+    startDateTime.setUTCHours(0 - 9, 0, 0, 0);
     whereCondition.createdAt = {
       ...whereCondition.createdAt,
       gte: startDateTime,
@@ -52,7 +51,7 @@ const adminGetBoard = (
   }
   if (endDate) {
     const endDateTime = new Date(endDate);
-    endDateTime.setUTCHours(23-9, 59, 59, 999);
+    endDateTime.setUTCHours(23 - 9, 59, 59, 999);
     whereCondition.createdAt = {
       ...whereCondition.createdAt,
       lte: endDateTime,
@@ -101,12 +100,34 @@ const getIdBoard = (boardId) => {
   return data;
 };
 
-const getLossBoard = (festivalId, page, pageSize, orderBy) => {
+const getLossBoard = (
+  festivalId,
+  page,
+  pageSize,
+  orderBy,
+  typeSelect,
+  keyword
+) => {
+  const whereCondition = {
+    festivalId: festivalId,
+    boardType: "LOSS",
+    lossType: typeSelect || undefined,
+    OR: [
+      {
+        title: {
+          contains: keyword,
+        },
+      },
+      {
+        content: {
+          contains: keyword,
+        },
+      },
+    ],
+  };
+
   const data = prisma.board.findMany({
-    where: {
-      festivalId: festivalId,
-      boardType: "LOSS",
-    },
+    where: whereCondition,
     skip: (page - 1) * pageSize,
     take: pageSize,
     orderBy: {
